@@ -1,0 +1,9 @@
+schema: 'https://wpe-hiring.tokopedia.net/graphql'
+documents: './graphql/**/*.ts'
+
+generates:
+  generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
