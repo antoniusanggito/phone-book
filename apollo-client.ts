@@ -14,7 +14,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const link = from([
   errorLink,
-  new HttpLink({ uri: 'https://wpe-hiring.tokopedia.net/graphql' }),
+  new HttpLink({ uri: process.env.NEXT_PUBLIC_GRAPHQL_URL }),
 ]);
 
 const createApolloClient = () =>
