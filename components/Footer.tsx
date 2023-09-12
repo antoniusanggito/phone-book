@@ -3,7 +3,6 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 
 const FooterStyle = styled.footer`
-  margin: 0 auto;
   padding: 2rem 0;
   background-color: var(--clr-background);
   box-shadow: 3px 3px 3px 3px var(--clr-background);

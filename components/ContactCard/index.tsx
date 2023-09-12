@@ -57,7 +57,28 @@ const Card: React.FC<CardProps> = ({
         <h4>
           {first_name} {last_name}
         </h4>
-        <p>{phones?.map((phone) => phone.number)}</p>
+        <div>
+          {phones?.map((phone) => (
+            <>
+              <span
+                css={css`
+                  margin-right: 1rem;
+                `}
+              >
+                <Image
+                  css={css`
+                    margin-right: 0.25rem;
+                  `}
+                  src="/icons/phone.svg"
+                  alt="Not Favorite Icon"
+                  width={10}
+                  height={10}
+                />
+                {phone.number}
+              </span>
+            </>
+          ))}
+        </div>
       </div>
       <div
         css={css`
