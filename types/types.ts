@@ -11,4 +11,8 @@ interface IPhone {
   number: string;
 }
 
-export type { IContact, IPhone };
+interface IFavContact extends IContact {
+  isFav: boolean;
+}
+
+export type { IContact, IPhone, IFavContact };

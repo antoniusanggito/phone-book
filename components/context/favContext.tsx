@@ -1,12 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-export interface IFavContacts {
+export interface IFavMap {
   [key: number]: boolean;
 }
 
 export interface FavContextType {
-  fav: IFavContacts;
-  setFav: React.Dispatch<React.SetStateAction<IFavContacts>>;
+  fav: IFavMap;
+  setFav: React.Dispatch<React.SetStateAction<IFavMap>>;
 }
 
 interface FavProviderProps {
@@ -24,7 +24,7 @@ function initState() {
 }
 
 const FavProvider: React.FC<FavProviderProps> = ({ children }) => {
-  const [fav, setFav] = useState<IFavContacts>(initState);
+  const [fav, setFav] = useState<IFavMap>(initState);
 
   useEffect(() => {
     localStorage.setItem('FAV', JSON.stringify(fav));

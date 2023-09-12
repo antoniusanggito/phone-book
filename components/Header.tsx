@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { stickyDiv } from '../styles/commonStyles';
 
 const HeaderStyle = styled.header`
-  position: sticky;
-  top: 0;
-  padding: 1rem 0;
+  ${stickyDiv}
   border-bottom: 1px solid #ccc;
-  background-color: #fff;
   text-align: center;
   box-shadow: 0px 1px 1px 0px #ccc;
 `;

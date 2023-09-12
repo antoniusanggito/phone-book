@@ -33,15 +33,15 @@ export default css`
   }
 
   h1 {
-    font-size: clamp(1.75rem, 0.5vw, 10rem);
+    font-size: clamp(1.5rem, 0.5vw, 10rem);
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   h4 {

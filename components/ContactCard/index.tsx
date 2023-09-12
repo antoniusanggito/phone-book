@@ -1,19 +1,17 @@
 import React, { useContext } from 'react';
-import { IContact } from '../../types/types';
+import { IFavContact } from '../../types/types';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { css } from '@emotion/react';
 import { FavContext, FavContextType } from '../context/favContext';
-
-interface CardProps extends IContact {
-  isFav: boolean;
-}
+import { clickable } from '../../styles/commonStyles';
 
 const CardStyle = styled.div`
   display: grid;
+  height: auto;
   grid-template-columns: 2fr 10fr 2fr;
   border-bottom: 1px solid #ccc;
-  padding: 0.5rem;
+  padding-bottom: 0.5rem;
   text-align: left;
   overflow: hidden;
 
@@ -22,7 +20,7 @@ const CardStyle = styled.div`
   }
 `;
 
-const Card: React.FC<CardProps> = ({
+const Card: React.FC<IFavContact> = ({
   isFav,
   id,
   first_name,
@@ -46,6 +44,7 @@ const Card: React.FC<CardProps> = ({
       >
         {isFav ? (
           <Image
+            css={clickable}
             src="/icons/star-fill.svg"
             alt="Favorite Icon"
             width={20}
@@ -54,6 +53,7 @@ const Card: React.FC<CardProps> = ({
           />
         ) : (
           <Image
+            css={clickable}
             src="/icons/star-empty.svg"
             alt="Not Favorite Icon"
             width={20}
@@ -67,25 +67,24 @@ const Card: React.FC<CardProps> = ({
           {first_name} {last_name}
         </h4>
         <div>
-          {phones?.map((phone) => (
-            <>
-              <span
+          {phones?.map((phone, i) => (
+            <span
+              key={i}
+              css={css`
+                margin-right: 1rem;
+              `}
+            >
+              <Image
                 css={css`
-                  margin-right: 1rem;
+                  margin-right: 0.25rem;
                 `}
-              >
-                <Image
-                  css={css`
-                    margin-right: 0.25rem;
-                  `}
-                  src="/icons/phone.svg"
-                  alt="Not Favorite Icon"
-                  width={10}
-                  height={10}
-                />
-                {phone.number}
-              </span>
-            </>
+                src="/icons/phone.svg"
+                alt="Not Favorite Icon"
+                width={10}
+                height={10}
+              />
+              {phone.number}
+            </span>
           ))}
         </div>
       </div>
@@ -96,6 +95,7 @@ const Card: React.FC<CardProps> = ({
         `}
       >
         <Image
+          css={clickable}
           src="/icons/delete.svg"
           alt="Delete Icon"
           width={20}
