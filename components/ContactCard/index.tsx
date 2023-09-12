@@ -6,7 +6,6 @@ import { css } from '@emotion/react';
 import { FavContext, FavContextType } from '../context/favContext';
 import { clickable } from '../../styles/commonStyles';
 import {
-  Contact,
   ContactsQuery,
   useDeleteContactMutation,
 } from '../../generated/graphql';
@@ -14,12 +13,10 @@ import { GET_CONTACTS } from '../../graphql/clientQueries';
 
 const CardStyle = styled.div`
   display: grid;
-  height: auto;
   grid-template-columns: 2fr 10fr 2fr;
   border-bottom: 1px solid #ccc;
   padding-bottom: 0.5rem;
   text-align: left;
-  overflow: hidden;
 
   &:last-child {
     border-bottom: none;
