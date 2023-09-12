@@ -5,6 +5,12 @@ import Image from 'next/image';
 import { css } from '@emotion/react';
 import { FavContext, FavContextType } from '../context/favContext';
 import { clickable } from '../../styles/commonStyles';
+import {
+  Contact,
+  ContactsQuery,
+  useDeleteContactMutation,
+} from '../../generated/graphql';
+import { GET_CONTACTS } from '../../graphql/clientQueries';
 
 const CardStyle = styled.div`
   display: grid;
@@ -28,9 +34,31 @@ const Card: React.FC<IFavContact> = ({
   phones,
 }) => {
   const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
+  const [deleteContact] = useDeleteContactMutation({
+    variables: { id: id },
+    update(cache, { data }) {
+      const existingContacts = cache.readQuery<ContactsQuery>({
+        query: GET_CONTACTS,
+      });
+      if (existingContacts) {
+        const newContacts = existingContacts.contact.filter(
+          (contact) => contact.id !== id
+        );
+        cache.writeQuery<ContactsQuery>({
+          query: GET_CONTACTS,
+          data: { contact: newContacts },
+        });
+      }
+    },
+  });
 
   const toggleFav = () => {
     setFav((prev) => ({ ...prev, [id]: !fav[id] }));
+  };
+
+  const handleDelete = async () => {
+    console.log('deleting');
+    await deleteContact();
   };
 
   return (
@@ -100,6 +128,7 @@ const Card: React.FC<IFavContact> = ({
           alt="Delete Icon"
           width={20}
           height={20}
+          onClick={handleDelete}
         />
       </div>
     </CardStyle>
