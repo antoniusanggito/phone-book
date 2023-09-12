@@ -2264,21 +2264,18 @@ export type Users_Variance_Fields = {
 export type ContactsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', created_at: any, updated_at?: any | null, first_name: string, id: number, last_name: string, phones: Array<{ __typename?: 'phone', contact_id: number, created_ad?: any | null, id: number, number: string }> }> };
+export type ContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', id: number, contact_id: number, number: string }> }> };
 
 
 export const ContactsDocument = gql`
     query Contacts {
   contact {
-    created_at
-    updated_at
-    first_name
     id
+    first_name
     last_name
     phones {
-      contact_id
-      created_ad
       id
+      contact_id
       number
     }
   }

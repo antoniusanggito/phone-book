@@ -1,50 +1,56 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 
 import { useContactsQuery } from '../generated/graphql';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import styled from '@emotion/styled';
+import Card from '../components/ContactCard';
+import Wrapper from '../components/ContactCard/Wrapper';
+
+const Container = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+`;
+
+const Main = styled.main`
+  display: flex;
+  justify-content: center;
+`;
 
 const Home: NextPage = () => {
   const { data, loading, error } = useContactsQuery();
 
   return (
-    <div>
+    <Container>
       <Head>
         <title>Phone Book</title>
         <meta name="description" content="Phone Book SPA" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <Header />
+      <Main>
         {loading && <div>Loading...</div>}
         {error && <div>{error.message}</div>}
-        {data?.contact.map((contact) => (
-          <div key={contact.id}>
-            <p>
-              {contact.first_name} - {contact.phones[0].number}
-            </p>
-          </div>
-        ))}
-      </main>
+        {data && (
+          <Wrapper>
+            {data.contact.map((contact) => (
+              <Card
+                isFav={false}
+                id={contact.id}
+                first_name={contact.first_name}
+                last_name={contact.last_name}
+                phones={contact.phones}
+              />
+            ))}
+          </Wrapper>
+        )}
+      </Main>
 
-      <footer>
-        <a
-          href="https://github.com/antoniusanggito"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Made with love{' '}
-          <span>
-            <Image
-              src="/github-mark.svg"
-              alt="Github Logo"
-              width={20}
-              height={20}
-            />
-          </span>
-        </a>
-      </footer>
-    </div>
+      <Footer />
+    </Container>
   );
 };
 
