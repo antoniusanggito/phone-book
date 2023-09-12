@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { IContact } from '../../types/types';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { css } from '@emotion/react';
+import { FavContext, FavContextType } from '../context/favContext';
 
 interface CardProps extends IContact {
   isFav: boolean;
@@ -28,6 +29,12 @@ const Card: React.FC<CardProps> = ({
   last_name,
   phones,
 }) => {
+  const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
+
+  const toggleFav = () => {
+    setFav((prev) => ({ ...prev, [id]: !fav[id] }));
+  };
+
   return (
     <CardStyle key={id}>
       <div
@@ -43,6 +50,7 @@ const Card: React.FC<CardProps> = ({
             alt="Favorite Icon"
             width={20}
             height={20}
+            onClick={toggleFav}
           />
         ) : (
           <Image
@@ -50,6 +58,7 @@ const Card: React.FC<CardProps> = ({
             alt="Not Favorite Icon"
             width={20}
             height={20}
+            onClick={toggleFav}
           />
         )}
       </div>

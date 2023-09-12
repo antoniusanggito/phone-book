@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -8,6 +9,7 @@ import styled from '@emotion/styled';
 import Card from '../components/ContactCard';
 import Wrapper from '../components/ContactCard/Wrapper';
 import { flexCenter } from '../styles/commonStyles';
+import { FavContext, FavContextType } from '../components/context/favContext';
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +27,7 @@ const Main = styled.main`
 
 const Home: NextPage = () => {
   const { data, loading, error } = useContactsQuery();
+  const { fav } = (useContext(FavContext) as FavContextType) ?? {};
 
   return (
     <>
@@ -42,7 +45,7 @@ const Home: NextPage = () => {
             {data?.contact.map((contact) => (
               <Card
                 key={contact.id}
-                isFav={false}
+                isFav={fav[contact.id]}
                 id={contact.id}
                 first_name={contact.first_name}
                 last_name={contact.last_name}
