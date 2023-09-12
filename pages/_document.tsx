@@ -10,7 +10,7 @@ import { extractCritical } from '@emotion/server';
 const APP_NAME = 'Phone Book';
 const APP_DESCRIPTION = 'Phone Book SPA';
 
-export default class extends Document {
+export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
     const critical = extractCritical(initialProps.html);
@@ -33,7 +33,7 @@ export default class extends Document {
       <Html lang="en" dir="ltr">
         <Head>
           <link rel="mask-icon" href="/icon-192x192.png" color="#5bbad5" />
-          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="msapplication-TileColor" content="#FFFFFF" />
 
           <meta name="application-name" content={APP_NAME} />
           <meta name="apple-mobile-web-app-capable" content="yes" />
