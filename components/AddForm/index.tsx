@@ -2,20 +2,21 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { useAddContactMutation } from '../../generated/graphql';
 
 interface AddFormProps {}
 
 type FormValues = {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   phones: {
     number: string;
   }[];
 };
 
 const initialFormValues = {
-  first_name: '',
-  last_name: '',
+  firstName: '',
+  lastName: '',
   phones: [{ number: '' }],
 };
 
@@ -38,7 +39,18 @@ const AddForm: React.FC = () => {
     control,
   });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const [addContact] = useAddContactMutation();
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+    addContact({
+      variables: {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        phones: data.phones,
+      },
+    });
+  });
 
   return (
     <FormStyle onSubmit={onSubmit}>
@@ -48,8 +60,8 @@ const AddForm: React.FC = () => {
           grid-template-columns: 1fr 1fr;
         `}
       >
-        <input type="text" id="first_name" {...register('first_name')} />
-        <input type="text" id="last_name" {...register('last_name')} />
+        <input type="text" id="firstName" {...register('firstName')} />
+        <input type="text" id="lastName" {...register('lastName')} />
       </div>
       <label>Phone numbers</label>
       <div>

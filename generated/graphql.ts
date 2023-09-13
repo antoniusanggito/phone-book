@@ -2261,6 +2261,15 @@ export type Users_Variance_Fields = {
   id?: Maybe<Scalars['Float']['output']>;
 };
 
+export type AddContactMutationVariables = Exact<{
+  first_name: Scalars['String']['input'];
+  last_name: Scalars['String']['input'];
+  phones: Array<Phone_Insert_Input> | Phone_Insert_Input;
+}>;
+
+
+export type AddContactMutation = { __typename?: 'mutation_root', insert_contact?: { __typename?: 'contact_mutation_response', returning: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> }> } | null };
+
 export type CountRegContactsQueryVariables = Exact<{
   favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
 }>;
@@ -2303,6 +2312,50 @@ export const CoreContactFieldsFragmentDoc = gql`
   }
 }
     `;
+export const AddContactDocument = gql`
+    mutation AddContact($first_name: String!, $last_name: String!, $phones: [phone_insert_input!]!) {
+  insert_contact(
+    objects: {first_name: $first_name, last_name: $last_name, phones: {data: $phones}}
+  ) {
+    returning {
+      id
+      first_name
+      last_name
+      phones {
+        number
+      }
+    }
+  }
+}
+    `;
+export type AddContactMutationFn = Apollo.MutationFunction<AddContactMutation, AddContactMutationVariables>;
+
+/**
+ * __useAddContactMutation__
+ *
+ * To run a mutation, you first call `useAddContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addContactMutation, { data, loading, error }] = useAddContactMutation({
+ *   variables: {
+ *      first_name: // value for 'first_name'
+ *      last_name: // value for 'last_name'
+ *      phones: // value for 'phones'
+ *   },
+ * });
+ */
+export function useAddContactMutation(baseOptions?: Apollo.MutationHookOptions<AddContactMutation, AddContactMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddContactMutation, AddContactMutationVariables>(AddContactDocument, options);
+      }
+export type AddContactMutationHookResult = ReturnType<typeof useAddContactMutation>;
+export type AddContactMutationResult = Apollo.MutationResult<AddContactMutation>;
+export type AddContactMutationOptions = Apollo.BaseMutationOptions<AddContactMutation, AddContactMutationVariables>;
 export const CountRegContactsDocument = gql`
     query CountRegContacts($favIds: [Int!]) {
   contact_aggregate(where: {id: {_nin: $favIds}}) {
