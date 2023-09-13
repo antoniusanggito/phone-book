@@ -23,6 +23,7 @@ import {
   PaginationContextType,
 } from '../components/context/paginationContext';
 import AddForm from '../components/AddForm';
+import SearchInput from '../components/SearchInput';
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +92,7 @@ const Home: NextPage = () => {
         <Main>
           {dataFav && dataReg && (
             <Wrapper>
+              <SearchInput />
               {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
               {(errorReg || errorFav) && (
                 <div css={fullCenter}>
