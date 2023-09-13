@@ -5,11 +5,9 @@ import Image from 'next/image';
 import { css } from '@emotion/react';
 import { FavContext, FavContextType } from '../context/favContext';
 import { clickable } from '../../styles/commonStyles';
-import {
-  ContactsQuery,
-  useDeleteContactMutation,
-} from '../../generated/graphql';
-import { GET_CONTACTS } from '../../graphql/clientQueries';
+import { useDeleteContactMutation } from '../../generated/graphql';
+import { GET_CONTACTS } from '../../graphql/getContacts';
+import { GET_FAV_CONTACTS } from '../../graphql/getFavContacts';
 
 const CardStyle = styled.div`
   display: grid;
@@ -34,15 +32,28 @@ const Card: React.FC<IFavContact> = ({
   const [deleteContact] = useDeleteContactMutation({
     variables: { id: id },
     update(cache, { data }) {
-      const existingContacts = cache.readQuery<ContactsQuery>({
-        query: GET_CONTACTS,
+      // update cache favContacts & contacts
+      const existingFavContacts: any = cache.readQuery({
+        query: GET_FAV_CONTACTS(fav),
       });
+      const existingContacts: any = cache.readQuery({
+        query: GET_CONTACTS(fav),
+      });
+      if (existingFavContacts) {
+        const newContacts = existingFavContacts.contact.filter(
+          (contact: any) => contact.id !== id
+        );
+        cache.writeQuery({
+          query: GET_FAV_CONTACTS(fav),
+          data: { contact: newContacts },
+        });
+      }
       if (existingContacts) {
         const newContacts = existingContacts.contact.filter(
-          (contact) => contact.id !== id
+          (contact: any) => contact.id !== id
         );
-        cache.writeQuery<ContactsQuery>({
-          query: GET_CONTACTS,
+        cache.writeQuery({
+          query: GET_CONTACTS(fav),
           data: { contact: newContacts },
         });
       }

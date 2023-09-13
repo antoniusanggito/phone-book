@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
-import { useContactsQuery } from '../generated/graphql';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styled from '@emotion/styled';
@@ -10,7 +9,12 @@ import Card from '../components/ContactCard';
 import Wrapper from '../components/ContactCard/Wrapper';
 import { fullCenter } from '../styles/commonStyles';
 import { FavContext, FavContextType } from '../components/context/favContext';
-import { IFavContact } from '../types/types';
+import AddButton from '../components/AddButton';
+import { css } from '@emotion/react';
+import { useQuery } from '@apollo/client';
+import { GET_FAV_CONTACTS } from '../graphql/getFavContacts';
+import { GET_CONTACTS } from '../graphql/getContacts';
+import PaginationButton from '../components/PaginationButton';
 
 const Container = styled.div`
   display: flex;
@@ -21,37 +25,39 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
+  height: 100%;
   display: flex;
   justify-content: center;
 `;
 
 const Home: NextPage = () => {
-  const { data, loading, error } = useContactsQuery();
+  const limit = 5;
+  const [offset, setOffset] = useState<number>(0);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
 
-  let favContacts: IFavContact[] = [];
-  let nonFavContacts: IFavContact[] = [];
-  if (data) {
-    data.contact.map((contact) => {
-      if (fav[contact.id]) {
-        favContacts.push({
-          isFav: true,
-          id: contact.id,
-          first_name: contact.first_name,
-          last_name: contact.last_name,
-          phones: contact.phones,
-        });
-      } else {
-        nonFavContacts.push({
-          isFav: false,
-          id: contact.id,
-          first_name: contact.first_name,
-          last_name: contact.last_name,
-          phones: contact.phones,
-        });
-      }
-    });
-  }
+  // graphql query
+  const {
+    data: dataFav,
+    loading: loadingFav,
+    error: errorFav,
+  } = useQuery(GET_FAV_CONTACTS(fav));
+
+  const { data, loading, error, fetchMore } = useQuery(GET_CONTACTS(fav), {
+    variables: { offset, limit },
+  });
+
+  const toggleModal = () => {
+    setOpenModal((prev) => !prev);
+  };
+
+  const handlePrev = () => {
+    setOffset((prev) => (prev - limit < 0 ? 0 : prev - limit));
+  };
+
+  const handleNext = () => {
+    setOffset((prev) => prev + limit);
+  };
 
   return (
     <>
@@ -65,14 +71,37 @@ const Home: NextPage = () => {
         <Header />
 
         <Main>
+          <div
+            css={css`
+              position: fixed;
+              bottom: 30px;
+              right: 20px;
+
+              @media screen and (min-width: 768px) {
+                bottom: 5vw;
+                right: 7vw;
+              }
+
+              @media screen and (min-width: 1024px) {
+                bottom: 8vw;
+                right: 15vw;
+              }
+            `}
+          >
+            <AddButton onClick={toggleModal} />
+          </div>
           <Wrapper>
-            {loading && <div css={fullCenter}>Loading...</div>}
-            {error && <div css={fullCenter}>{error.message}</div>}
+            {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>}
+            {(error || errorFav) && (
+              <div css={fullCenter}>
+                {error?.message} {errorFav?.message}
+              </div>
+            )}
             <div>
-              <h3>Favorites ({favContacts.length})</h3>
+              <h3>Favorites ({dataFav?.contact.length})</h3>
             </div>
             {data &&
-              favContacts.map((contact) => (
+              dataFav?.contact.map((contact: any) => (
                 <Card
                   key={contact.id}
                   isFav={fav[contact.id]}
@@ -84,7 +113,7 @@ const Home: NextPage = () => {
               ))}
             <h3>Others</h3>
             {data &&
-              nonFavContacts.map((contact) => (
+              data.contact.map((contact: any) => (
                 <Card
                   key={contact.id}
                   isFav={fav[contact.id]}
@@ -94,6 +123,10 @@ const Home: NextPage = () => {
                   phones={contact.phones}
                 />
               ))}
+
+            {/* Pagination button */}
+            {offset !== 0 && <PaginationButton onClick={handlePrev} />}
+            <PaginationButton onClick={handleNext} />
           </Wrapper>
         </Main>
 

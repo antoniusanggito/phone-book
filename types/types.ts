@@ -6,8 +6,6 @@ interface IContact {
 }
 
 interface IPhone {
-  id: number;
-  contact_id: number;
   number: string;
 }
 

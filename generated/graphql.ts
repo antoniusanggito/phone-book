@@ -2266,18 +2266,15 @@ export type DeleteContactMutationVariables = Exact<{
 }>;
 
 
-export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number } | null };
-
-export type ContactsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', id: number, contact_id: number, number: string }> }> };
+export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number, first_name: string, last_name: string } | null };
 
 
 export const DeleteContactDocument = gql`
     mutation DeleteContact($id: Int!) {
   delete_contact_by_pk(id: $id) {
     id
+    first_name
+    last_name
   }
 }
     `;
@@ -2307,44 +2304,3 @@ export function useDeleteContactMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteContactMutationHookResult = ReturnType<typeof useDeleteContactMutation>;
 export type DeleteContactMutationResult = Apollo.MutationResult<DeleteContactMutation>;
 export type DeleteContactMutationOptions = Apollo.BaseMutationOptions<DeleteContactMutation, DeleteContactMutationVariables>;
-export const ContactsDocument = gql`
-    query Contacts {
-  contact {
-    id
-    first_name
-    last_name
-    phones {
-      id
-      contact_id
-      number
-    }
-  }
-}
-    `;
-
-/**
- * __useContactsQuery__
- *
- * To run a query within a React component, call `useContactsQuery` and pass it any options that fit your needs.
- * When your component renders, `useContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useContactsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useContactsQuery(baseOptions?: Apollo.QueryHookOptions<ContactsQuery, ContactsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ContactsQuery, ContactsQueryVariables>(ContactsDocument, options);
-      }
-export function useContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContactsQuery, ContactsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ContactsQuery, ContactsQueryVariables>(ContactsDocument, options);
-        }
-export type ContactsQueryHookResult = ReturnType<typeof useContactsQuery>;
-export type ContactsLazyQueryHookResult = ReturnType<typeof useContactsLazyQuery>;
-export type ContactsQueryResult = Apollo.QueryResult<ContactsQuery, ContactsQueryVariables>;
