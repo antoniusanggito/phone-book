@@ -11,9 +11,6 @@ import { fullCenter } from '../styles/commonStyles';
 import { FavContext, FavContextType } from '../components/context/favContext';
 import AddButton from '../components/AddButton';
 import { css } from '@emotion/react';
-import { useQuery } from '@apollo/client';
-import { GET_FAV_CONTACTS } from '../graphql/getFavContacts';
-import { GET_REG_CONTACTS } from '../graphql/getRegContacts';
 import PaginationButton from '../components/PaginationButton';
 import {
   useCountRegContactsQuery,
