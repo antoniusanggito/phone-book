@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -22,6 +22,7 @@ import {
   PaginationContext,
   PaginationContextType,
 } from '../components/context/paginationContext';
+import AddForm from '../components/AddForm';
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +39,6 @@ const Main = styled.main`
 `;
 
 const Home: NextPage = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
   const { offset, limit, page, setOffset } =
     (useContext(PaginationContext) as PaginationContextType) ?? {};
@@ -69,10 +69,6 @@ const Home: NextPage = () => {
     count = dataCount.contact_aggregate.aggregate?.count as number;
   }
 
-  const toggleModal = () => {
-    setOpenModal((prev) => !prev);
-  };
-
   const handlePrev = () => {
     setOffset((prev) => (prev - limit < 0 ? 0 : prev - limit));
   };
@@ -93,25 +89,6 @@ const Home: NextPage = () => {
         <Header />
 
         <Main>
-          <div
-            css={css`
-              position: fixed;
-              bottom: 30px;
-              right: 20px;
-
-              @media screen and (min-width: 768px) {
-                bottom: 5vw;
-                right: 7vw;
-              }
-
-              @media screen and (min-width: 1024px) {
-                bottom: 8vw;
-                right: 15vw;
-              }
-            `}
-          >
-            <AddButton onClick={toggleModal} />
-          </div>
           {dataFav && dataReg && (
             <Wrapper>
               {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
@@ -120,9 +97,7 @@ const Home: NextPage = () => {
                   {errorReg?.message} {errorFav?.message}
                 </div>
               )}
-              <div>
-                <h3>Favorites ({dataFav.contact.length})</h3>
-              </div>
+              <h3>Favorites ({dataFav.contact.length})</h3>
               {dataFav.contact.map((contact: any) => (
                 <Card
                   key={contact.id}
@@ -164,6 +139,9 @@ const Home: NextPage = () => {
                   onClick={handleNext}
                   disabled={page * limit >= count}
                 />
+              </section>
+              <section>
+                <AddForm />
               </section>
             </Wrapper>
           )}
