@@ -15,6 +15,11 @@ export const GET_CONTACTS = (fav: IFavMap) => {
           number
         }
       }
+      contact_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   `;
 

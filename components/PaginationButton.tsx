@@ -4,26 +4,46 @@ import React, { useState } from 'react';
 import { fullCenter } from '../styles/commonStyles';
 
 type Props = {
+  type: 'prev' | 'next';
   onClick: () => void;
+  disabled: boolean;
 };
 
 const ButtonStyle = styled.button`
   ${fullCenter}
-  width: 60px;
-  height: 60px;
+  width: auto;
+  height: 30px;
   background-color: var(--clr-secondary);
-  border-radius: 30px;
   color: #fff;
+
+  &:disabled {
+    background-color: #ccc;
+  }
 
   &:hover {
     cursor: pointer;
   }
 `;
 
-const AddButton: React.FC<Props> = ({ onClick }) => {
+const AddButton: React.FC<Props> = ({ type, onClick, disabled }) => {
   return (
-    <ButtonStyle onClick={onClick}>
-      <Image src="/icons/plus.svg" alt="Add Icon" width={24} height={24} />
+    <ButtonStyle onClick={onClick} disabled={disabled}>
+      {type === 'prev' && (
+        <Image
+          src="/icons/arrow-left.svg"
+          alt="Previous Page Icon"
+          width={16}
+          height={16}
+        />
+      )}
+      {type === 'next' && (
+        <Image
+          src="/icons/arrow-right.svg"
+          alt="Next Page Icon"
+          width={16}
+          height={16}
+        />
+      )}
     </ButtonStyle>
   );
 };

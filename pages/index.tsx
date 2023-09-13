@@ -35,6 +35,7 @@ const Home: NextPage = () => {
   const [offset, setOffset] = useState<number>(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
+  const page = offset / limit + 1;
 
   // graphql query
   const {
@@ -58,6 +59,12 @@ const Home: NextPage = () => {
   const handleNext = () => {
     setOffset((prev) => prev + limit);
   };
+
+  // Count regular contacts
+  const count =
+    data?.contact_aggregate.aggregate.count - dataFav?.contact.length;
+
+  console.log('dataFav, data', dataFav, data, offset);
 
   return (
     <>
@@ -90,18 +97,18 @@ const Home: NextPage = () => {
           >
             <AddButton onClick={toggleModal} />
           </div>
-          <Wrapper>
-            {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>}
-            {(error || errorFav) && (
-              <div css={fullCenter}>
-                {error?.message} {errorFav?.message}
+          {dataFav && data && (
+            <Wrapper>
+              {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
+              {(error || errorFav) && (
+                <div css={fullCenter}>
+                  {error?.message} {errorFav?.message}
+                </div>
+              )}
+              <div>
+                <h3>Favorites ({dataFav?.contact.length})</h3>
               </div>
-            )}
-            <div>
-              <h3>Favorites ({dataFav?.contact.length})</h3>
-            </div>
-            {data &&
-              dataFav?.contact.map((contact: any) => (
+              {dataFav.contact.map((contact: any) => (
                 <Card
                   key={contact.id}
                   isFav={fav[contact.id]}
@@ -111,9 +118,8 @@ const Home: NextPage = () => {
                   phones={contact.phones}
                 />
               ))}
-            <h3>Others</h3>
-            {data &&
-              data.contact.map((contact: any) => (
+              <h3>Others</h3>
+              {data.contact.map((contact: any) => (
                 <Card
                   key={contact.id}
                   isFav={fav[contact.id]}
@@ -124,10 +130,28 @@ const Home: NextPage = () => {
                 />
               ))}
 
-            {/* Pagination button */}
-            {offset !== 0 && <PaginationButton onClick={handlePrev} />}
-            <PaginationButton onClick={handleNext} />
-          </Wrapper>
+              {/* Pagination button */}
+              <section css={fullCenter}>
+                <PaginationButton
+                  type="prev"
+                  onClick={handlePrev}
+                  disabled={page == 1}
+                />
+                <h4
+                  css={css`
+                    margin: 0 1rem;
+                  `}
+                >
+                  {page}
+                </h4>
+                <PaginationButton
+                  type="next"
+                  onClick={handleNext}
+                  disabled={page * limit >= count}
+                />
+              </section>
+            </Wrapper>
+          )}
         </Main>
 
         <Footer />
