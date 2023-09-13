@@ -2376,10 +2376,15 @@ export type DeleteContactMutationOptions = Apollo.BaseMutationOptions<DeleteCont
 export const GetFavContactsDocument = gql`
     query GetFavContacts($favIds: [Int!]) {
   contact(where: {id: {_in: $favIds}}) {
-    ...CoreContactFields
+    id
+    first_name
+    last_name
+    phones {
+      number
+    }
   }
 }
-    ${CoreContactFieldsFragmentDoc}`;
+    `;
 
 /**
  * __useGetFavContactsQuery__
@@ -2411,10 +2416,15 @@ export type GetFavContactsQueryResult = Apollo.QueryResult<GetFavContactsQuery, 
 export const GetRegContactsDocument = gql`
     query GetRegContacts($offset: Int, $limit: Int, $favIds: [Int!]) {
   contact(offset: $offset, limit: $limit, where: {id: {_nin: $favIds}}) {
-    ...CoreContactFields
+    id
+    first_name
+    last_name
+    phones {
+      number
+    }
   }
 }
-    ${CoreContactFieldsFragmentDoc}`;
+    `;
 
 /**
  * __useGetRegContactsQuery__
