@@ -5,9 +5,18 @@ import Image from 'next/image';
 import { css } from '@emotion/react';
 import { FavContext, FavContextType } from '../context/favContext';
 import { clickable } from '../../styles/commonStyles';
-import { useDeleteContactMutation } from '../../generated/graphql';
-import { GET_CONTACTS } from '../../graphql/getContacts';
+import {
+  GetFavContactsQuery,
+  GetRegContactsQuery,
+  useDeleteContactMutation,
+} from '../../generated/graphql';
+import { GET_REG_CONTACTS } from '../../graphql/getRegContacts';
 import { GET_FAV_CONTACTS } from '../../graphql/getFavContacts';
+import getFavIds from '../../utils/getFavIdQuery';
+import {
+  PaginationContext,
+  PaginationContextType,
+} from '../context/paginationContext';
 
 const CardStyle = styled.div`
   display: grid;
@@ -29,33 +38,44 @@ const Card: React.FC<IFavContact> = ({
   phones,
 }) => {
   const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
+  const { offset, limit } =
+    (useContext(PaginationContext) as PaginationContextType) ?? {};
+  const favIds = getFavIds(fav);
+
   const [deleteContact] = useDeleteContactMutation({
-    variables: { id: id },
+    variables: { id },
     update(cache, { data }) {
-      // update cache favContacts & contacts
-      const existingFavContacts: any = cache.readQuery({
-        query: GET_FAV_CONTACTS(fav),
-      });
-      const existingContacts: any = cache.readQuery({
-        query: GET_CONTACTS(fav),
-      });
-      if (existingFavContacts) {
-        const newContacts = existingFavContacts.contact.filter(
-          (contact: any) => contact.id !== id
-        );
-        cache.writeQuery({
-          query: GET_FAV_CONTACTS(fav),
-          data: { contact: newContacts },
+      // update cache favContacts & regContacts
+      if (isFav) {
+        const existingFavContacts = cache.readQuery<GetFavContactsQuery>({
+          query: GET_FAV_CONTACTS,
+          variables: { favIds },
         });
-      }
-      if (existingContacts) {
-        const newContacts = existingContacts.contact.filter(
-          (contact: any) => contact.id !== id
-        );
-        cache.writeQuery({
-          query: GET_CONTACTS(fav),
-          data: { contact: newContacts },
+        existingFavContacts &&
+          cache.writeQuery({
+            query: GET_FAV_CONTACTS,
+            variables: { favIds },
+            data: {
+              contact: existingFavContacts.contact.filter(
+                (contact) => contact.id !== id
+              ),
+            },
+          });
+      } else {
+        const existingRegContacts = cache.readQuery<GetRegContactsQuery>({
+          query: GET_REG_CONTACTS,
+          variables: { offset, limit, favIds },
         });
+        existingRegContacts &&
+          cache.writeQuery({
+            query: GET_REG_CONTACTS,
+            variables: { offset, limit, favIds },
+            data: {
+              contact: existingRegContacts.contact.filter(
+                (contact) => contact.id !== id
+              ),
+            },
+          });
       }
     },
   });
@@ -65,7 +85,6 @@ const Card: React.FC<IFavContact> = ({
   };
 
   const handleDelete = async () => {
-    console.log('deleting');
     await deleteContact();
   };
 

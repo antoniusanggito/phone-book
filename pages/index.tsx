@@ -13,8 +13,18 @@ import AddButton from '../components/AddButton';
 import { css } from '@emotion/react';
 import { useQuery } from '@apollo/client';
 import { GET_FAV_CONTACTS } from '../graphql/getFavContacts';
-import { GET_CONTACTS } from '../graphql/getContacts';
+import { GET_REG_CONTACTS } from '../graphql/getRegContacts';
 import PaginationButton from '../components/PaginationButton';
+import {
+  useCountRegContactsQuery,
+  useGetFavContactsQuery,
+  useGetRegContactsQuery,
+} from '../generated/graphql';
+import getFavIds from '../utils/getFavIdQuery';
+import {
+  PaginationContext,
+  PaginationContextType,
+} from '../components/context/paginationContext';
 
 const Container = styled.div`
   display: flex;
@@ -31,22 +41,36 @@ const Main = styled.main`
 `;
 
 const Home: NextPage = () => {
-  const limit = 5;
-  const [offset, setOffset] = useState<number>(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
-  const page = offset / limit + 1;
+  const { offset, limit, page, setOffset } =
+    (useContext(PaginationContext) as PaginationContextType) ?? {};
+  const favIds = getFavIds(fav);
 
-  // graphql query
+  // graphql queries
   const {
     data: dataFav,
     loading: loadingFav,
     error: errorFav,
-  } = useQuery(GET_FAV_CONTACTS(fav));
+  } = useGetFavContactsQuery({ variables: { favIds } });
 
-  const { data, loading, error, fetchMore } = useQuery(GET_CONTACTS(fav), {
-    variables: { offset, limit },
+  const {
+    data: dataReg,
+    loading: loadingReg,
+    error: errorReg,
+  } = useGetRegContactsQuery({
+    variables: { offset, limit, favIds },
   });
+
+  const { data: dataCount, error: errorCount } = useCountRegContactsQuery({
+    variables: { favIds },
+  });
+
+  // regContacts count
+  let count = 0;
+  if (dataCount) {
+    count = dataCount.contact_aggregate.aggregate?.count as number;
+  }
 
   const toggleModal = () => {
     setOpenModal((prev) => !prev);
@@ -59,12 +83,6 @@ const Home: NextPage = () => {
   const handleNext = () => {
     setOffset((prev) => prev + limit);
   };
-
-  // Count regular contacts
-  const count =
-    data?.contact_aggregate.aggregate.count - dataFav?.contact.length;
-
-  console.log('dataFav, data', dataFav, data, offset);
 
   return (
     <>
@@ -97,16 +115,16 @@ const Home: NextPage = () => {
           >
             <AddButton onClick={toggleModal} />
           </div>
-          {dataFav && data && (
+          {dataFav && dataReg && (
             <Wrapper>
               {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
-              {(error || errorFav) && (
+              {(errorReg || errorFav) && (
                 <div css={fullCenter}>
-                  {error?.message} {errorFav?.message}
+                  {errorReg?.message} {errorFav?.message}
                 </div>
               )}
               <div>
-                <h3>Favorites ({dataFav?.contact.length})</h3>
+                <h3>Favorites ({dataFav.contact.length})</h3>
               </div>
               {dataFav.contact.map((contact: any) => (
                 <Card
@@ -119,7 +137,7 @@ const Home: NextPage = () => {
                 />
               ))}
               <h3>Others</h3>
-              {data.contact.map((contact: any) => (
+              {dataReg.contact.map((contact: any) => (
                 <Card
                   key={contact.id}
                   isFav={fav[contact.id]}

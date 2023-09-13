@@ -1,10 +1,11 @@
 import { IFavMap } from '../components/context/favContext';
 
-const getFavIdQuery = (fav: IFavMap) =>
-  Object.keys(fav).map((key) => {
-    if (fav[parseInt(key)]) {
-      return `{id: {_eq: ${parseInt(key)}}}`;
-    }
+const getFavIds = (fav: IFavMap) => {
+  const res: number[] = [];
+  Object.keys(fav).forEach((key) => {
+    if (fav[parseInt(key)]) res.push(parseInt(key));
   });
+  return res;
+};
 
-export default getFavIdQuery;
+export default getFavIds;

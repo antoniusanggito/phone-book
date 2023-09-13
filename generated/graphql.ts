@@ -2261,20 +2261,89 @@ export type Users_Variance_Fields = {
   id?: Maybe<Scalars['Float']['output']>;
 };
 
+export type CountRegContactsQueryVariables = Exact<{
+  favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+}>;
+
+
+export type CountRegContactsQuery = { __typename?: 'query_root', contact_aggregate: { __typename?: 'contact_aggregate', aggregate?: { __typename?: 'contact_aggregate_fields', count: number } | null } };
+
 export type DeleteContactMutationVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number, first_name: string, last_name: string } | null };
+export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number } | null };
+
+export type CoreContactFieldsFragment = { __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> };
+
+export type GetFavContactsQueryVariables = Exact<{
+  favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+}>;
 
 
+export type GetFavContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> }> };
+
+export type GetRegContactsQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+}>;
+
+
+export type GetRegContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> }> };
+
+export const CoreContactFieldsFragmentDoc = gql`
+    fragment CoreContactFields on contact {
+  id
+  first_name
+  last_name
+  phones {
+    number
+  }
+}
+    `;
+export const CountRegContactsDocument = gql`
+    query CountRegContacts($favIds: [Int!]) {
+  contact_aggregate(where: {id: {_nin: $favIds}}) {
+    aggregate {
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __useCountRegContactsQuery__
+ *
+ * To run a query within a React component, call `useCountRegContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountRegContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountRegContactsQuery({
+ *   variables: {
+ *      favIds: // value for 'favIds'
+ *   },
+ * });
+ */
+export function useCountRegContactsQuery(baseOptions?: Apollo.QueryHookOptions<CountRegContactsQuery, CountRegContactsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CountRegContactsQuery, CountRegContactsQueryVariables>(CountRegContactsDocument, options);
+      }
+export function useCountRegContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountRegContactsQuery, CountRegContactsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CountRegContactsQuery, CountRegContactsQueryVariables>(CountRegContactsDocument, options);
+        }
+export type CountRegContactsQueryHookResult = ReturnType<typeof useCountRegContactsQuery>;
+export type CountRegContactsLazyQueryHookResult = ReturnType<typeof useCountRegContactsLazyQuery>;
+export type CountRegContactsQueryResult = Apollo.QueryResult<CountRegContactsQuery, CountRegContactsQueryVariables>;
 export const DeleteContactDocument = gql`
     mutation DeleteContact($id: Int!) {
   delete_contact_by_pk(id: $id) {
     id
-    first_name
-    last_name
   }
 }
     `;
@@ -2304,3 +2373,75 @@ export function useDeleteContactMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteContactMutationHookResult = ReturnType<typeof useDeleteContactMutation>;
 export type DeleteContactMutationResult = Apollo.MutationResult<DeleteContactMutation>;
 export type DeleteContactMutationOptions = Apollo.BaseMutationOptions<DeleteContactMutation, DeleteContactMutationVariables>;
+export const GetFavContactsDocument = gql`
+    query GetFavContacts($favIds: [Int!]) {
+  contact(where: {id: {_in: $favIds}}) {
+    ...CoreContactFields
+  }
+}
+    ${CoreContactFieldsFragmentDoc}`;
+
+/**
+ * __useGetFavContactsQuery__
+ *
+ * To run a query within a React component, call `useGetFavContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFavContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFavContactsQuery({
+ *   variables: {
+ *      favIds: // value for 'favIds'
+ *   },
+ * });
+ */
+export function useGetFavContactsQuery(baseOptions?: Apollo.QueryHookOptions<GetFavContactsQuery, GetFavContactsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFavContactsQuery, GetFavContactsQueryVariables>(GetFavContactsDocument, options);
+      }
+export function useGetFavContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFavContactsQuery, GetFavContactsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFavContactsQuery, GetFavContactsQueryVariables>(GetFavContactsDocument, options);
+        }
+export type GetFavContactsQueryHookResult = ReturnType<typeof useGetFavContactsQuery>;
+export type GetFavContactsLazyQueryHookResult = ReturnType<typeof useGetFavContactsLazyQuery>;
+export type GetFavContactsQueryResult = Apollo.QueryResult<GetFavContactsQuery, GetFavContactsQueryVariables>;
+export const GetRegContactsDocument = gql`
+    query GetRegContacts($offset: Int, $limit: Int, $favIds: [Int!]) {
+  contact(offset: $offset, limit: $limit, where: {id: {_nin: $favIds}}) {
+    ...CoreContactFields
+  }
+}
+    ${CoreContactFieldsFragmentDoc}`;
+
+/**
+ * __useGetRegContactsQuery__
+ *
+ * To run a query within a React component, call `useGetRegContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRegContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRegContactsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      favIds: // value for 'favIds'
+ *   },
+ * });
+ */
+export function useGetRegContactsQuery(baseOptions?: Apollo.QueryHookOptions<GetRegContactsQuery, GetRegContactsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRegContactsQuery, GetRegContactsQueryVariables>(GetRegContactsDocument, options);
+      }
+export function useGetRegContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRegContactsQuery, GetRegContactsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRegContactsQuery, GetRegContactsQueryVariables>(GetRegContactsDocument, options);
+        }
+export type GetRegContactsQueryHookResult = ReturnType<typeof useGetRegContactsQuery>;
+export type GetRegContactsLazyQueryHookResult = ReturnType<typeof useGetRegContactsLazyQuery>;
+export type GetRegContactsQueryResult = Apollo.QueryResult<GetRegContactsQuery, GetRegContactsQueryVariables>;
