@@ -10,7 +10,7 @@ import { FavContext, FavContextType } from '../components/context/favContext';
 import { useGetFavContactsQuery } from '../generated/graphql';
 import getFavIds from '../utils/getFavIdQuery';
 import AddForm from '../components/AddForm';
-import SearchInput from '../components/SearchInput';
+import SearchInput from '../components/Contacts/SearchInput';
 import ContactsSection from '../components/Contacts';
 
 const Container = styled.div`
@@ -22,7 +22,7 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
 `;

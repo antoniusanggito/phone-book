@@ -13,7 +13,7 @@ import {
   PaginationContextType,
 } from '../context/paginationContext';
 import getFavIds from '../../utils/getFavIdQuery';
-import Button from './Button';
+import Button from '../shared/Button';
 
 type FormValues = {
   firstName: string;

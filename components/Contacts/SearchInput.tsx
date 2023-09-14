@@ -2,10 +2,10 @@ import React, { FormEvent, useContext, useState } from 'react';
 import {
   PaginationContext,
   PaginationContextType,
-} from './context/paginationContext';
+} from '../context/paginationContext';
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import Button from './AddForm/Button';
+import Button from '../shared/Button';
 import { css } from '@emotion/react';
 
 const FormStyle = styled.form`

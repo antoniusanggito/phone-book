@@ -24,6 +24,7 @@ const ContactsSectionStyle = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-bottom: 1px solid #ccc;
 `;
 
 const PaginationWrapper = styled.div`
