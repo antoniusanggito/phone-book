@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -39,8 +39,6 @@ const Main = styled.main`
 
 const Home: NextPage = () => {
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
-  const { pagination, limit, page, setPagination } =
-    (useContext(PaginationContext) as PaginationContextType) ?? {};
   const favIds = getFavIds(fav);
 
   // graphql queries
@@ -50,27 +48,6 @@ const Home: NextPage = () => {
     error: errorFav,
     refetch: refetchFav,
   } = useGetFavContactsQuery({ variables: { favIds } });
-
-  const { data: dataCount, error: errorCount } = useCountRegContactsQuery({
-    variables: { favIds },
-  });
-
-  // regContacts count
-  let count = 0;
-  if (dataCount) {
-    count = dataCount.contact_aggregate.aggregate?.count as number;
-  }
-
-  const handlePrev = () => {
-    setPagination((prev) => ({
-      ...prev,
-      offset: prev.offset - limit < 0 ? 0 : prev.offset - limit,
-    }));
-  };
-
-  const handleNext = () => {
-    setPagination((prev) => ({ ...prev, offset: prev.offset + limit }));
-  };
 
   return (
     <>
@@ -90,26 +67,6 @@ const Home: NextPage = () => {
 
               <ContactsSection dataFav={dataFav} />
 
-              {/* Pagination button */}
-              <section css={fullCenter}>
-                <PaginationButton
-                  type="prev"
-                  onClick={handlePrev}
-                  disabled={page == 1}
-                />
-                <h4
-                  css={css`
-                    margin: 0 1rem;
-                  `}
-                >
-                  {page}
-                </h4>
-                <PaginationButton
-                  type="next"
-                  onClick={handleNext}
-                  disabled={page * limit >= count}
-                />
-              </section>
               <section>
                 <AddForm />
               </section>

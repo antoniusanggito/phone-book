@@ -38,7 +38,7 @@ const Card: React.FC<IFavContact> = ({
   phones,
 }) => {
   const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
-  const { offset, limit } =
+  const { pagination, limit } =
     (useContext(PaginationContext) as PaginationContextType) ?? {};
   const favIds = getFavIds(fav);
 
@@ -64,16 +64,32 @@ const Card: React.FC<IFavContact> = ({
       } else {
         const existingRegContacts = cache.readQuery<GetRegContactsQuery>({
           query: GET_REG_CONTACTS,
-          variables: { offset, limit, favIds },
+          variables: {
+            offset: pagination.offset,
+            limit,
+            favIds,
+            like: pagination.like,
+          },
         });
         existingRegContacts &&
           cache.writeQuery({
             query: GET_REG_CONTACTS,
-            variables: { offset, limit, favIds },
+            variables: {
+              offset: pagination.offset,
+              limit,
+              favIds,
+              like: pagination.like,
+            },
             data: {
               contact: existingRegContacts.contact.filter(
                 (contact) => contact.id !== id
               ),
+              contact_aggregate: {
+                aggregate: {
+                  count: existingRegContacts.contact_aggregate.aggregate
+                    ?.count as number,
+                },
+              },
             },
           });
       }
@@ -86,6 +102,7 @@ const Card: React.FC<IFavContact> = ({
 
   const handleDelete = async () => {
     await deleteContact();
+    delete fav[id];
   };
 
   return (

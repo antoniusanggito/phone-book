@@ -2301,7 +2301,7 @@ export type GetRegContactsQueryVariables = Exact<{
 }>;
 
 
-export type GetRegContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> }> };
+export type GetRegContactsQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> }>, contact_aggregate: { __typename?: 'contact_aggregate', aggregate?: { __typename?: 'contact_aggregate_fields', count: number } | null } };
 
 export const CoreContactFieldsFragmentDoc = gql`
     fragment CoreContactFields on contact {
@@ -2479,6 +2479,13 @@ export const GetRegContactsDocument = gql`
     last_name
     phones {
       number
+    }
+  }
+  contact_aggregate(
+    where: {_and: [{id: {_nin: $favIds}}, {_or: [{first_name: {_ilike: $like}}, {last_name: {_ilike: $like}}]}]}
+  ) {
+    aggregate {
+      count
     }
   }
 }

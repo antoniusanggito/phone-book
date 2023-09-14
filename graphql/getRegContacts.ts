@@ -29,5 +29,22 @@ export const GET_REG_CONTACTS = gql`
         number
       }
     }
+    contact_aggregate(
+      where: {
+        _and: [
+          { id: { _nin: $favIds } }
+          {
+            _or: [
+              { first_name: { _ilike: $like } }
+              { last_name: { _ilike: $like } }
+            ]
+          }
+        ]
+      }
+    ) {
+      aggregate {
+        count
+      }
+    }
   }
 `;
