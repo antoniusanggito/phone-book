@@ -2297,6 +2297,7 @@ export type GetRegContactsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+  like?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -2467,8 +2468,12 @@ export type GetFavContactsQueryHookResult = ReturnType<typeof useGetFavContactsQ
 export type GetFavContactsLazyQueryHookResult = ReturnType<typeof useGetFavContactsLazyQuery>;
 export type GetFavContactsQueryResult = Apollo.QueryResult<GetFavContactsQuery, GetFavContactsQueryVariables>;
 export const GetRegContactsDocument = gql`
-    query GetRegContacts($offset: Int, $limit: Int, $favIds: [Int!]) {
-  contact(offset: $offset, limit: $limit, where: {id: {_nin: $favIds}}) {
+    query GetRegContacts($offset: Int, $limit: Int, $favIds: [Int!], $like: String) {
+  contact(
+    offset: $offset
+    limit: $limit
+    where: {_and: [{id: {_nin: $favIds}}, {_or: [{first_name: {_ilike: $like}}, {last_name: {_ilike: $like}}]}]}
+  ) {
     id
     first_name
     last_name
@@ -2494,6 +2499,7 @@ export const GetRegContactsDocument = gql`
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
  *      favIds: // value for 'favIds'
+ *      like: // value for 'like'
  *   },
  * });
  */

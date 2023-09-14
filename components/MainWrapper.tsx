@@ -5,7 +5,7 @@ interface WrapperProps {
   children: React.ReactNode;
 }
 
-const WrapperStyle = styled.div`
+const MainWrapperStyle = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -15,8 +15,8 @@ const WrapperStyle = styled.div`
   gap: 0.5rem;
 `;
 
-const Wrapper: React.FC<WrapperProps> = ({ children }) => {
-  return <WrapperStyle>{children}</WrapperStyle>;
+const MainWrapper: React.FC<WrapperProps> = ({ children }) => {
+  return <MainWrapperStyle>{children}</MainWrapperStyle>;
 };
 
-export default Wrapper;
+export default MainWrapper;

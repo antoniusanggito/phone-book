@@ -1,10 +1,15 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
+
+interface PaginationType {
+  offset: number;
+  like: string;
+}
 
 export interface PaginationContextType {
-  offset: number;
+  pagination: PaginationType;
   limit: number;
   page: number;
-  setOffset: React.Dispatch<React.SetStateAction<number>>;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationType>>;
 }
 
 interface PaginationProviderProps {
@@ -24,16 +29,21 @@ function initState() {
 const PaginationProvider: React.FC<PaginationProviderProps> = ({
   children,
 }) => {
-  const [offset, setOffset] = useState<number>(0);
+  const [pagination, setPagination] = useState<PaginationType>({
+    offset: 0,
+    like: '%%',
+  });
   const limit = 5;
-  const page = offset / limit + 1;
+  const page = pagination.offset / limit + 1;
 
   // useEffect(() => {
   //   localStorage.setItem('pagination', JSON.stringify(pagination));
   // }, [pagination]);
 
   return (
-    <PaginationContext.Provider value={{ offset, limit, page, setOffset }}>
+    <PaginationContext.Provider
+      value={{ pagination, limit, page, setPagination }}
+    >
       {children}
     </PaginationContext.Provider>
   );

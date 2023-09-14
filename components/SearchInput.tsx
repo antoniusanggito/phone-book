@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
-
-type Props = {};
+import React, { FormEvent, useContext, useState } from 'react';
+import {
+  PaginationContext,
+  PaginationContextType,
+} from './context/paginationContext';
 
 const SearchInput: React.FC = () => {
+  const { setPagination } =
+    (useContext(PaginationContext) as PaginationContextType) ?? {};
   const [input, setInput] = useState<string>('');
 
-  const onSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(e);
+    setPagination({
+      offset: 0,
+      like: `%${input}%`,
+    });
+  };
+
+  const handleChange = (e: any) => {
+    setInput(e.target.value);
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         name="search"
         id="search"
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={handleChange}
         placeholder="Search Contact"
       />
       <input type="submit" />

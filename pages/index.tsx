@@ -5,17 +5,14 @@ import Head from 'next/head';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styled from '@emotion/styled';
-import Card from '../components/ContactCard';
-import Wrapper from '../components/ContactCard/Wrapper';
+import MainWrapper from '../components/MainWrapper';
 import { fullCenter } from '../styles/commonStyles';
 import { FavContext, FavContextType } from '../components/context/favContext';
-import AddButton from '../components/AddButton';
 import { css } from '@emotion/react';
 import PaginationButton from '../components/PaginationButton';
 import {
   useCountRegContactsQuery,
   useGetFavContactsQuery,
-  useGetRegContactsQuery,
 } from '../generated/graphql';
 import getFavIds from '../utils/getFavIdQuery';
 import {
@@ -24,6 +21,7 @@ import {
 } from '../components/context/paginationContext';
 import AddForm from '../components/AddForm';
 import SearchInput from '../components/SearchInput';
+import ContactsSection from '../components/ContactCard/ContactsSection';
 
 const Container = styled.div`
   display: flex;
@@ -41,7 +39,7 @@ const Main = styled.main`
 
 const Home: NextPage = () => {
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
-  const { offset, limit, page, setOffset } =
+  const { pagination, limit, page, setPagination } =
     (useContext(PaginationContext) as PaginationContextType) ?? {};
   const favIds = getFavIds(fav);
 
@@ -50,15 +48,8 @@ const Home: NextPage = () => {
     data: dataFav,
     loading: loadingFav,
     error: errorFav,
+    refetch: refetchFav,
   } = useGetFavContactsQuery({ variables: { favIds } });
-
-  const {
-    data: dataReg,
-    loading: loadingReg,
-    error: errorReg,
-  } = useGetRegContactsQuery({
-    variables: { offset, limit, favIds },
-  });
 
   const { data: dataCount, error: errorCount } = useCountRegContactsQuery({
     variables: { favIds },
@@ -71,11 +62,14 @@ const Home: NextPage = () => {
   }
 
   const handlePrev = () => {
-    setOffset((prev) => (prev - limit < 0 ? 0 : prev - limit));
+    setPagination((prev) => ({
+      ...prev,
+      offset: prev.offset - limit < 0 ? 0 : prev.offset - limit,
+    }));
   };
 
   const handleNext = () => {
-    setOffset((prev) => prev + limit);
+    setPagination((prev) => ({ ...prev, offset: prev.offset + limit }));
   };
 
   return (
@@ -90,37 +84,11 @@ const Home: NextPage = () => {
         <Header />
 
         <Main>
-          {dataFav && dataReg && (
-            <Wrapper>
+          {dataFav && (
+            <MainWrapper>
               <SearchInput />
-              {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
-              {(errorReg || errorFav) && (
-                <div css={fullCenter}>
-                  {errorReg?.message} {errorFav?.message}
-                </div>
-              )}
-              <h3>Favorites ({dataFav.contact.length})</h3>
-              {dataFav.contact.map((contact: any) => (
-                <Card
-                  key={contact.id}
-                  isFav={fav[contact.id]}
-                  id={contact.id}
-                  first_name={contact.first_name}
-                  last_name={contact.last_name}
-                  phones={contact.phones}
-                />
-              ))}
-              <h3>Others</h3>
-              {dataReg.contact.map((contact: any) => (
-                <Card
-                  key={contact.id}
-                  isFav={fav[contact.id]}
-                  id={contact.id}
-                  first_name={contact.first_name}
-                  last_name={contact.last_name}
-                  phones={contact.phones}
-                />
-              ))}
+
+              <ContactsSection dataFav={dataFav} />
 
               {/* Pagination button */}
               <section css={fullCenter}>
@@ -145,7 +113,7 @@ const Home: NextPage = () => {
               <section>
                 <AddForm />
               </section>
-            </Wrapper>
+            </MainWrapper>
           )}
         </Main>
 
