@@ -84,6 +84,7 @@ const Card: React.FC<IFavContact> = ({
               contact: existingRegContacts.contact.filter(
                 (contact) => contact.id !== id
               ),
+              // count - 1?
               contact_aggregate: {
                 aggregate: {
                   count: existingRegContacts.contact_aggregate.aggregate

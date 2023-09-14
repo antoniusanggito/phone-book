@@ -10,6 +10,7 @@ export const GET_REG_CONTACTS = gql`
     contact(
       offset: $offset
       limit: $limit
+      order_by: [{ first_name: asc }, { last_name: asc }]
       where: {
         _and: [
           { id: { _nin: $favIds } }

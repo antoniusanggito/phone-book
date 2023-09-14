@@ -2472,6 +2472,7 @@ export const GetRegContactsDocument = gql`
   contact(
     offset: $offset
     limit: $limit
+    order_by: [{first_name: asc}, {last_name: asc}]
     where: {_and: [{id: {_nin: $favIds}}, {_or: [{first_name: {_ilike: $like}}, {last_name: {_ilike: $like}}]}]}
   ) {
     id

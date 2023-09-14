@@ -1,8 +1,18 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useAddContactMutation } from '../../generated/graphql';
+import {
+  GetRegContactsQuery,
+  useAddContactMutation,
+} from '../../generated/graphql';
+import { GET_REG_CONTACTS } from '../../graphql/getRegContacts';
+import { FavContext, FavContextType } from '../context/favContext';
+import {
+  PaginationContext,
+  PaginationContextType,
+} from '../context/paginationContext';
+import getFavIds from '../../utils/getFavIdQuery';
 
 interface AddFormProps {}
 
@@ -27,6 +37,11 @@ const FormStyle = styled.form`
 `;
 
 const AddForm: React.FC = () => {
+  const { fav } = (useContext(FavContext) as FavContextType) ?? {};
+  const { pagination, limit } =
+    (useContext(PaginationContext) as PaginationContextType) ?? {};
+  const favIds = getFavIds(fav);
+
   const {
     register,
     control,
@@ -39,7 +54,42 @@ const AddForm: React.FC = () => {
     control,
   });
 
-  const [addContact] = useAddContactMutation();
+  const [addContact] = useAddContactMutation({
+    update(cache, { data }) {
+      console.log(data);
+      const existingRegContacts = cache.readQuery<GetRegContactsQuery>({
+        query: GET_REG_CONTACTS,
+        variables: {
+          offset: pagination.offset,
+          limit,
+          favIds,
+          like: pagination.like,
+        },
+      });
+      existingRegContacts &&
+        cache.writeQuery({
+          query: GET_REG_CONTACTS,
+          variables: {
+            offset: pagination.offset,
+            limit,
+            favIds,
+            like: pagination.like,
+          },
+          data: {
+            contact: existingRegContacts.contact.concat(
+              data?.insert_contact?.returning[0] as any
+            ),
+            // count + 1?
+            contact_aggregate: {
+              aggregate: {
+                count: existingRegContacts.contact_aggregate.aggregate
+                  ?.count as number,
+              },
+            },
+          },
+        });
+    },
+  });
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
