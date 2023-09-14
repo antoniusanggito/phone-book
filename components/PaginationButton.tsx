@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React from 'react';
 import { fullCenter } from '../styles/commonStyles';
 
 type Props = {

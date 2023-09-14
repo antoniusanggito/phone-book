@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 
-interface PaginationType {
+export interface PaginationType {
   offset: number;
   like: string;
 }
@@ -9,7 +9,6 @@ export interface PaginationContextType {
   pagination: PaginationType;
   limit: number;
   page: number;
-  count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
   setPagination: React.Dispatch<React.SetStateAction<PaginationType>>;
 }
@@ -35,7 +34,6 @@ const PaginationProvider: React.FC<PaginationProviderProps> = ({
     offset: 0,
     like: '%%',
   });
-  const [count, setCount] = useState<number>(0);
   const limit = 5;
   const page = pagination.offset / limit + 1;
 
@@ -45,7 +43,7 @@ const PaginationProvider: React.FC<PaginationProviderProps> = ({
 
   return (
     <PaginationContext.Provider
-      value={{ pagination, limit, page, count, setCount, setPagination }}
+      value={{ pagination, limit, page, setPagination }}
     >
       {children}
     </PaginationContext.Provider>

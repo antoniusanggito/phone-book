@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -6,22 +6,12 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styled from '@emotion/styled';
 import MainWrapper from '../components/MainWrapper';
-import { fullCenter } from '../styles/commonStyles';
 import { FavContext, FavContextType } from '../components/context/favContext';
-import { css } from '@emotion/react';
-import PaginationButton from '../components/PaginationButton';
-import {
-  useCountRegContactsQuery,
-  useGetFavContactsQuery,
-} from '../generated/graphql';
+import { useGetFavContactsQuery } from '../generated/graphql';
 import getFavIds from '../utils/getFavIdQuery';
-import {
-  PaginationContext,
-  PaginationContextType,
-} from '../components/context/paginationContext';
 import AddForm from '../components/AddForm';
 import SearchInput from '../components/SearchInput';
-import ContactsSection from '../components/ContactCard/ContactsSection';
+import ContactsSection from '../components/Contacts';
 
 const Container = styled.div`
   display: flex;
@@ -59,21 +49,15 @@ const Home: NextPage = () => {
 
       <Container>
         <Header />
-
         <Main>
           {dataFav && (
             <MainWrapper>
               <SearchInput />
-
               <ContactsSection dataFav={dataFav} />
-
-              <section>
-                <AddForm />
-              </section>
+              <AddForm />
             </MainWrapper>
           )}
         </Main>
-
         <Footer />
       </Container>
     </>
