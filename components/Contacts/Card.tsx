@@ -21,8 +21,10 @@ import {
 const CardStyle = styled.div`
   display: grid;
   grid-template-columns: 2fr 10fr 2fr;
+  min-height: 60px;
   border-bottom: 1px solid #ccc;
-  padding-bottom: 0.5rem;
+  align-content: center;
+  padding: 8px 0;
   text-align: left;
 
   &:last-child {

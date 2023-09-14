@@ -13,6 +13,7 @@ import {
   PaginationContextType,
 } from '../context/paginationContext';
 import getFavIds from '../../utils/getFavIdQuery';
+import Button from './Button';
 
 type FormValues = {
   firstName: string;
@@ -29,10 +30,24 @@ const initialFormValues = {
 };
 
 const FormWrapper = styled.section`
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  /* border: 1px solid #bbb; */
+  padding: 0.5rem;
+
   form {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 0.5rem;
+  }
+
+  input[type='text'],
+  input[type='tel'] {
+    width: 100%;
+    height: 2rem;
+    padding: 0 10px;
   }
 `;
 
@@ -104,38 +119,112 @@ const AddForm: React.FC = () => {
 
   return (
     <FormWrapper>
+      <h3
+        css={css`
+          margin-bottom: 0.5rem;
+        `}
+      >
+        Add Contact
+      </h3>
       <form onSubmit={onSubmit}>
         <div
           css={css`
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 0.25rem;
           `}
         >
-          <input type="text" id="firstName" {...register('firstName')} />
-          <input type="text" id="lastName" {...register('lastName')} />
+          <input
+            type="text"
+            id="firstName"
+            placeholder="First Name"
+            maxLength={20}
+            {...register('firstName', {
+              required: '*First Name is required',
+            })}
+          />
+          <input
+            type="text"
+            id="lastName"
+            placeholder="Last Name"
+            maxLength={20}
+            {...register('lastName', {
+              required: '*Last Name is required',
+            })}
+          />
         </div>
-        <label>Phone numbers</label>
-        <div>
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+          `}
+        >
           {fields.map((field, index) => (
-            <div key={field.id}>
-              <input
-                type="text"
-                id="phones"
-                {...register(`phones.${index}.number` as const)}
-              />
+            <div
+              css={css`
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0.25rem;
+              `}
+              key={field.id}
+            >
               {index > 0 && (
-                <button type="button" onClick={() => remove(index)}>
-                  Remove phone number
-                </button>
+                <Button role="tertiary" onClick={() => remove(index)}>
+                  -
+                </Button>
+              )}
+              <input
+                type="tel"
+                id="phones"
+                maxLength={20}
+                placeholder={
+                  index > 0 ? `Phone Number ${index + 1}` : 'Phone Number'
+                }
+                {...register(`phones.${index}.number` as const, {
+                  required: 'Input Phone Number',
+                  pattern: {
+                    value: /^[0-9\b+\-.]+$/,
+                    message: 'Input a valid phone number',
+                  },
+                  minLength: {
+                    value: 3,
+                    message: 'Input a valid phone number',
+                  },
+                })}
+              />
+              {index == 0 && (
+                <Button role="secondary" onClick={() => append({ number: '' })}>
+                  +
+                </Button>
               )}
             </div>
           ))}
-          <button type="button" onClick={() => append({ number: '' })}>
-            Add another phone number
-          </button>
         </div>
-
-        <input type="submit" />
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+          `}
+        >
+          <div>
+            {errors.firstName && <p>{`${errors.firstName.message}`}</p>}
+            {errors.lastName && <p>{`${errors.lastName.message}`}</p>}
+          </div>
+          <input
+            css={css`
+              width: fit-content;
+              padding: 4px 6px;
+              background-color: var(--clr-secondary);
+              color: #fff;
+            `}
+            type="submit"
+          />
+        </div>
       </form>
     </FormWrapper>
   );

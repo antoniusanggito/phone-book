@@ -16,6 +16,7 @@ export default css`
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     font-size: 16px;
     scroll-behavior: smooth;
+    line-height: normal;
   }
 
   *,

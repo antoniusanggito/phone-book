@@ -88,7 +88,13 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ dataFav }) => {
               phones={contact.phones}
             />
           ))}
-          <h3>Others</h3>
+          <h3
+            css={css`
+              margin-top: 1rem;
+            `}
+          >
+            Others
+          </h3>
           {dataReg?.contact.map((contact: any) => (
             <Card
               key={contact.id}
