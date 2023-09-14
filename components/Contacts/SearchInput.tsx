@@ -71,7 +71,7 @@ const SearchInput: React.FC = () => {
             font-weight: 400;
           `}
         >
-          Showing results for "{showSearch}"
+          Showing results for &quot;{showSearch}&quot;
         </h4>
       )}
     </div>
