@@ -46,7 +46,7 @@ const FormWrapper = styled.section`
   input[type='text'],
   input[type='tel'] {
     width: 100%;
-    height: 2rem;
+    height: 2.5rem;
     padding: 0 10px;
   }
 `;
@@ -61,6 +61,7 @@ const AddForm: React.FC = () => {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({ defaultValues: initialFormValues });
 
@@ -115,6 +116,7 @@ const AddForm: React.FC = () => {
         phones: data.phones,
       },
     });
+    reset();
   });
 
   return (
@@ -172,7 +174,11 @@ const AddForm: React.FC = () => {
               key={field.id}
             >
               {index > 0 && (
-                <Button role="tertiary" onClick={() => remove(index)}>
+                <Button
+                  type="button"
+                  role="tertiary"
+                  onClick={() => remove(index)}
+                >
                   -
                 </Button>
               )}
@@ -196,7 +202,11 @@ const AddForm: React.FC = () => {
                 })}
               />
               {index == 0 && (
-                <Button role="secondary" onClick={() => append({ number: '' })}>
+                <Button
+                  type="button"
+                  role="secondary"
+                  onClick={() => append({ number: '' })}
+                >
                   +
                 </Button>
               )}
