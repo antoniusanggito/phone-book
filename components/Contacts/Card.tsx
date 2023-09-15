@@ -41,8 +41,6 @@ const Card: React.FC<IFavContact> = ({
   phones,
 }) => {
   const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
-  const { pagination, limit } =
-    (useContext(PaginationContext) as PaginationContextType) ?? {};
 
   const [deleteContact] = useDeleteContactMutation({
     variables: { id },
@@ -51,68 +49,23 @@ const Card: React.FC<IFavContact> = ({
         `${data.delete_contact_by_pk?.first_name} ${data.delete_contact_by_pk?.first_name} contact has been deleted`
       );
     },
-    refetchQueries: [
-      {
-        query: GET_REG_CONTACTS,
-        variables: {
-          offset: pagination.offset,
-          limit,
-          favIds: getFavIds(fav),
-          like: pagination.like,
-        },
-      },
-    ],
-    // update(cache, { data }) {
-    //   // update cache favContacts & regContacts
-    //   if (isFav) {
-    //     const existingFavContacts = cache.readQuery<GetFavContactsQuery>({
-    //       query: GET_FAV_CONTACTS,
-    //       variables: { favIds },
-    //     });
-    //     existingFavContacts &&
-    //       cache.writeQuery({
-    //         query: GET_FAV_CONTACTS,
-    //         variables: { favIds },
-    //         data: {
-    //           contact: existingFavContacts.contact.filter(
-    //             (contact) => contact.id !== id
-    //           ),
-    //         },
-    //       });
-    //   } else {
-    //     const existingRegContacts = cache.readQuery<GetRegContactsQuery>({
-    //       query: GET_REG_CONTACTS,
-    //       variables: {
-    //         offset: pagination.offset,
-    //         limit,
-    //         favIds,
-    //         like: pagination.like,
-    //       },
-    //     });
-    //     existingRegContacts &&
-    //       cache.writeQuery({
-    //         query: GET_REG_CONTACTS,
-    //         variables: {
-    //           offset: pagination.offset,
-    //           limit,
-    //           favIds,
-    //           like: pagination.like,
-    //         },
-    //         data: {
-    //           contact: existingRegContacts.contact.filter(
-    //             (contact) => contact.id !== id
-    //           ),
-    //           // count - 1?
-    //           contact_aggregate: {
-    //             aggregate: {
-    //               count: existingRegContacts.contact_aggregate.aggregate
-    //                 ?.count as number,
-    //             },
-    //           },
-    //         },
-    //       });
-    //   }
-    // },
+    // delete contact cache to re-request updated pagination
+    update(cache) {
+      cache.evict({ fieldName: 'contact' });
+      cache.gc();
+    },
+    // // not needed to refetch after deleting cache
+    // refetchQueries: [
+    //   {
+    //     query: GET_REG_CONTACTS,
+    //     variables: {
+    //       offset: pagination.offset,
+    //       limit,
+    //       favIds: getFavIds(fav),
+    //       like: pagination.like,
+    //     },
+    //   },
+    // ],
   });
 
   const toggleFav = () => {

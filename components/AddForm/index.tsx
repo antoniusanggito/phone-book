@@ -15,6 +15,7 @@ import {
 import getFavIds from '../../utils/getFavIdQuery';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
+import { Reference, StoreObject } from '@apollo/client';
 
 type FormValues = {
   firstName: string;
@@ -53,11 +54,6 @@ const FormWrapper = styled.section`
 `;
 
 const AddForm: React.FC = () => {
-  const { fav } = (useContext(FavContext) as FavContextType) ?? {};
-  const { pagination, limit } =
-    (useContext(PaginationContext) as PaginationContextType) ?? {};
-  const favIds = getFavIds(fav);
-
   const {
     register,
     control,
@@ -77,40 +73,23 @@ const AddForm: React.FC = () => {
         `Contact ${data.insert_contact?.returning[0].first_name} ${data.insert_contact?.returning[0].last_name} has been added`
       );
     },
-    update(cache, { data }) {
-      console.log(data);
-      const existingRegContacts = cache.readQuery<GetRegContactsQuery>({
-        query: GET_REG_CONTACTS,
-        variables: {
-          offset: pagination.offset,
-          limit,
-          favIds,
-          like: pagination.like,
-        },
-      });
-      existingRegContacts &&
-        cache.writeQuery({
-          query: GET_REG_CONTACTS,
-          variables: {
-            offset: pagination.offset,
-            limit,
-            favIds,
-            like: pagination.like,
-          },
-          data: {
-            contact: existingRegContacts.contact.concat(
-              data?.insert_contact?.returning[0] as any
-            ),
-            // count + 1?
-            contact_aggregate: {
-              aggregate: {
-                count: existingRegContacts.contact_aggregate.aggregate
-                  ?.count as number,
-              },
-            },
-          },
-        });
+    // delete contact cache to re-request updated pagination
+    update(cache) {
+      cache.evict({ fieldName: 'contact' });
+      cache.gc();
     },
+    // // not needed to refetch after deleting cache
+    // refetchQueries: [
+    //   {
+    //     query: GET_REG_CONTACTS,
+    //     variables: {
+    //       offset: pagination.offset,
+    //       limit,
+    //       favIds: getFavIds(fav),
+    //       like: pagination.like,
+    //     },
+    //   },
+    // ],
   });
 
   const onSubmit = handleSubmit((data) => {

@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import styled from '@emotion/styled';
 import {
   GetFavContactsQuery,
+  useGetFavContactsLazyQuery,
   useGetFavContactsQuery,
   useGetRegContactsLazyQuery,
 } from '../../generated/graphql';
@@ -38,21 +39,14 @@ const ContactsSection: React.FC = () => {
     (useContext(PaginationContext) as PaginationContextType) ?? {};
 
   // graphql queries
-  const {
-    data: dataFav,
-    loading: loadingFav,
-    error: errorFav,
-    refetch: refetchFav,
-  } = useGetFavContactsQuery({ variables: { favIds: getFavIds(fav) } });
+  const [
+    getFavContacts,
+    { data: dataFav, loading: loadingFav, error: errorFav },
+  ] = useGetFavContactsLazyQuery();
 
   const [
     getRegContacts,
-    {
-      data: dataReg,
-      loading: loadingReg,
-      error: errorReg,
-      refetch: refetchReg,
-    },
+    { data: dataReg, loading: loadingReg, error: errorReg },
   ] = useGetRegContactsLazyQuery();
 
   useEffect(() => {
@@ -65,6 +59,12 @@ const ContactsSection: React.FC = () => {
       },
     });
   }, [pagination, fav]);
+
+  useEffect(() => {
+    getFavContacts({
+      variables: { favIds: getFavIds(fav), like: pagination.like },
+    });
+  }, [fav]);
 
   const handlePrev = () => {
     setPagination((prev) => ({
@@ -83,6 +83,7 @@ const ContactsSection: React.FC = () => {
         <div>
           {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
           {errorReg && <div css={fullCenter}>{errorReg?.message}</div>}
+          {errorFav && <div css={fullCenter}>{errorFav?.message}</div>}
           {dataFav && <h3>Favorites ({dataFav.contact.length})</h3>}
           {dataFav?.contact.map((contact: any) => (
             <Card

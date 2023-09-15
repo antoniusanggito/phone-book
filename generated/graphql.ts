@@ -2288,6 +2288,7 @@ export type CoreContactFieldsFragment = { __typename?: 'contact', id: number, fi
 
 export type GetFavContactsQueryVariables = Exact<{
   favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+  like?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -2430,8 +2431,10 @@ export type DeleteContactMutationHookResult = ReturnType<typeof useDeleteContact
 export type DeleteContactMutationResult = Apollo.MutationResult<DeleteContactMutation>;
 export type DeleteContactMutationOptions = Apollo.BaseMutationOptions<DeleteContactMutation, DeleteContactMutationVariables>;
 export const GetFavContactsDocument = gql`
-    query GetFavContacts($favIds: [Int!]) {
-  contact(where: {id: {_in: $favIds}}) {
+    query GetFavContacts($favIds: [Int!], $like: String) {
+  contact(
+    where: {_and: [{id: {_in: $favIds}}, {_or: [{first_name: {_ilike: $like}}, {last_name: {_ilike: $like}}]}]}
+  ) {
     id
     first_name
     last_name
@@ -2455,6 +2458,7 @@ export const GetFavContactsDocument = gql`
  * const { data, loading, error } = useGetFavContactsQuery({
  *   variables: {
  *      favIds: // value for 'favIds'
+ *      like: // value for 'like'
  *   },
  * });
  */
