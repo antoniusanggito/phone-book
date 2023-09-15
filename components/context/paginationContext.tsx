@@ -9,7 +9,6 @@ export interface PaginationContextType {
   pagination: PaginationType;
   limit: number;
   page: number;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
   setPagination: React.Dispatch<React.SetStateAction<PaginationType>>;
 }
 

@@ -3,20 +3,16 @@ import { ApolloProvider } from '@apollo/client';
 import createApolloClient from '../apollo-client';
 import { Global } from '@emotion/react';
 import global from '../styles/global';
-import FavProvider from '../components/context/favContext';
-import PaginationProvider from '../components/context/paginationContext';
+import { Toaster } from 'react-hot-toast';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const client = createApolloClient();
   return (
     <>
       <Global styles={global} />
+      <Toaster position="top-center" />
       <ApolloProvider client={client}>
-        <FavProvider>
-          <PaginationProvider>
-            <Component {...pageProps} />
-          </PaginationProvider>
-        </FavProvider>
+        <Component {...pageProps} />
       </ApolloProvider>
     </>
   );

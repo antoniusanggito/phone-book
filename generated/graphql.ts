@@ -2282,7 +2282,7 @@ export type DeleteContactMutationVariables = Exact<{
 }>;
 
 
-export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number } | null };
+export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number, first_name: string, last_name: string } | null };
 
 export type CoreContactFieldsFragment = { __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> };
 
@@ -2398,6 +2398,8 @@ export const DeleteContactDocument = gql`
     mutation DeleteContact($id: Int!) {
   delete_contact_by_pk(id: $id) {
     id
+    first_name
+    last_name
   }
 }
     `;

@@ -14,6 +14,7 @@ import {
 } from '../context/paginationContext';
 import getFavIds from '../../utils/getFavIdQuery';
 import Button from '../shared/Button';
+import toast from 'react-hot-toast';
 
 type FormValues = {
   firstName: string;
@@ -71,6 +72,11 @@ const AddForm: React.FC = () => {
   });
 
   const [addContact] = useAddContactMutation({
+    onCompleted: (data) => {
+      toast.success(
+        `Contact ${data.insert_contact?.returning[0].first_name} ${data.insert_contact?.returning[0].last_name} has been added`
+      );
+    },
     update(cache, { data }) {
       console.log(data);
       const existingRegContacts = cache.readQuery<GetRegContactsQuery>({

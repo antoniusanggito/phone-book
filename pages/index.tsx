@@ -6,12 +6,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styled from '@emotion/styled';
 import MainWrapper from '../components/MainWrapper';
-import { FavContext, FavContextType } from '../components/context/favContext';
-import { useGetFavContactsQuery } from '../generated/graphql';
-import getFavIds from '../utils/getFavIdQuery';
 import AddForm from '../components/AddForm';
 import SearchInput from '../components/Contacts/SearchInput';
 import ContactsSection from '../components/Contacts';
+import FavProvider from '../components/context/favContext';
+import PaginationProvider from '../components/context/paginationContext';
 
 const Container = styled.div`
   display: flex;
@@ -28,17 +27,6 @@ const Main = styled.main`
 `;
 
 const Home: NextPage = () => {
-  const { fav } = (useContext(FavContext) as FavContextType) ?? {};
-  const favIds = getFavIds(fav);
-
-  // graphql queries
-  const {
-    data: dataFav,
-    loading: loadingFav,
-    error: errorFav,
-    refetch: refetchFav,
-  } = useGetFavContactsQuery({ variables: { favIds } });
-
   return (
     <>
       <Head>
@@ -50,13 +38,15 @@ const Home: NextPage = () => {
       <Container>
         <Header />
         <Main>
-          {dataFav && (
-            <MainWrapper>
-              <SearchInput />
-              <ContactsSection dataFav={dataFav} />
-              <AddForm />
-            </MainWrapper>
-          )}
+          <FavProvider>
+            <PaginationProvider>
+              <MainWrapper>
+                <SearchInput />
+                <ContactsSection />
+                <AddForm />
+              </MainWrapper>
+            </PaginationProvider>
+          </FavProvider>
         </Main>
         <Footer />
       </Container>
