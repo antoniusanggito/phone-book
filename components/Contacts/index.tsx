@@ -1,9 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from '@emotion/styled';
 import {
-  GetFavContactsQuery,
   useGetFavContactsLazyQuery,
-  useGetFavContactsQuery,
   useGetRegContactsLazyQuery,
 } from '../../generated/graphql';
 import Card from './Card';
@@ -16,6 +14,8 @@ import getFavIds from '../../utils/getFavIdQuery';
 import { fullCenter } from '../../styles/commonStyles';
 import PaginationButton from '../PaginationButton';
 import { css } from '@emotion/react';
+import Loading from '../Loading';
+import scrollTop from '../../utils/scrollTop';
 
 const ContactsSectionStyle = styled.section`
   flex-grow: 1;
@@ -50,6 +50,9 @@ const ContactsSection: React.FC = () => {
   ] = useGetRegContactsLazyQuery();
 
   useEffect(() => {
+    getFavContacts({
+      variables: { favIds: getFavIds(fav), like: pagination.like },
+    });
     getRegContacts({
       variables: {
         offset: pagination.offset,
@@ -59,12 +62,6 @@ const ContactsSection: React.FC = () => {
       },
     });
   }, [pagination, fav]);
-
-  useEffect(() => {
-    getFavContacts({
-      variables: { favIds: getFavIds(fav), like: pagination.like },
-    });
-  }, [fav]);
 
   const handlePrev = () => {
     setPagination((prev) => ({
@@ -81,10 +78,10 @@ const ContactsSection: React.FC = () => {
     <>
       <ContactsSectionStyle>
         <div>
-          {/* {(loading || loadingFav) && <div css={fullCenter}>Loading...</div>} */}
+          {/* {(loadingReg || loadingFav) && <Loading />} */}
           {errorReg && <div css={fullCenter}>{errorReg?.message}</div>}
           {errorFav && <div css={fullCenter}>{errorFav?.message}</div>}
-          {dataFav && <h3>Favorites ({dataFav.contact.length})</h3>}
+          <h3>Favorites ({dataFav?.contact.length})</h3>
           {dataFav?.contact.map((contact: any) => (
             <Card
               key={contact.id}
@@ -95,15 +92,14 @@ const ContactsSection: React.FC = () => {
               phones={contact.phones}
             />
           ))}
-          {dataReg && (
-            <h3
-              css={css`
-                margin-top: 1rem;
-              `}
-            >
-              Others
-            </h3>
-          )}
+
+          <h3
+            css={css`
+              margin-top: 1rem;
+            `}
+          >
+            Others
+          </h3>
           {dataReg?.contact.map((contact: any) => (
             <Card
               key={contact.id}

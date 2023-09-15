@@ -21,6 +21,7 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
+  min-height: 100vh;
   flex-grow: 1;
   display: flex;
   justify-content: center;

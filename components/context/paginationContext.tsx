@@ -33,7 +33,7 @@ const PaginationProvider: React.FC<PaginationProviderProps> = ({
     offset: 0,
     like: '%%',
   });
-  const limit = 5;
+  const limit = 10;
   const page = pagination.offset / limit + 1;
 
   // useEffect(() => {

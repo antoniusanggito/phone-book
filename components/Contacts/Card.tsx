@@ -5,19 +5,9 @@ import Image from 'next/image';
 import { css } from '@emotion/react';
 import { FavContext, FavContextType } from '../context/favContext';
 import { clickable } from '../../styles/commonStyles';
-import {
-  GetFavContactsQuery,
-  GetRegContactsQuery,
-  useDeleteContactMutation,
-} from '../../generated/graphql';
-import { GET_REG_CONTACTS } from '../../graphql/getRegContacts';
-import { GET_FAV_CONTACTS } from '../../graphql/getFavContacts';
-import getFavIds from '../../utils/getFavIdQuery';
-import {
-  PaginationContext,
-  PaginationContextType,
-} from '../context/paginationContext';
+import { useDeleteContactMutation } from '../../generated/graphql';
 import toast from 'react-hot-toast';
+import scrollTop from '../../utils/scrollTop';
 
 const CardStyle = styled.div`
   display: grid;
@@ -46,7 +36,7 @@ const Card: React.FC<IFavContact> = ({
     variables: { id },
     onCompleted: (data) => {
       toast.success(
-        `${data.delete_contact_by_pk?.first_name} ${data.delete_contact_by_pk?.first_name} contact has been deleted`
+        `Deleted contact ${data.delete_contact_by_pk?.first_name} ${data.delete_contact_by_pk?.last_name}`
       );
     },
     // delete contact cache to re-request updated pagination
@@ -69,7 +59,15 @@ const Card: React.FC<IFavContact> = ({
   });
 
   const toggleFav = () => {
-    setFav((prev) => ({ ...prev, [id]: !fav[id] }));
+    setFav((prev) => {
+      const prevFav = fav[id];
+      if (prevFav) {
+        toast.success(`Removed ${first_name} ${last_name} from favorite`);
+      } else {
+        toast.success(`Added ${first_name} ${last_name} to favorite`);
+      }
+      return { ...prev, [id]: !prevFav };
+    });
   };
 
   const handleDelete = async () => {

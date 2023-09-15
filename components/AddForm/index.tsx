@@ -1,21 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import {
-  GetRegContactsQuery,
-  useAddContactMutation,
-} from '../../generated/graphql';
-import { GET_REG_CONTACTS } from '../../graphql/getRegContacts';
-import { FavContext, FavContextType } from '../context/favContext';
-import {
-  PaginationContext,
-  PaginationContextType,
-} from '../context/paginationContext';
-import getFavIds from '../../utils/getFavIdQuery';
+import { useAddContactMutation } from '../../generated/graphql';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
-import { Reference, StoreObject } from '@apollo/client';
+import scrollTop from '../../utils/scrollTop';
 
 type FormValues = {
   firstName: string;
@@ -70,7 +60,7 @@ const AddForm: React.FC = () => {
   const [addContact] = useAddContactMutation({
     onCompleted: (data) => {
       toast.success(
-        `Contact ${data.insert_contact?.returning[0].first_name} ${data.insert_contact?.returning[0].last_name} has been added`
+        `Added contact ${data.insert_contact?.returning[0].first_name} ${data.insert_contact?.returning[0].last_name}`
       );
     },
     // delete contact cache to re-request updated pagination
@@ -93,7 +83,6 @@ const AddForm: React.FC = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
     addContact({
       variables: {
         first_name: data.firstName,

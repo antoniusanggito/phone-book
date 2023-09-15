@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import Button from '../shared/Button';
 import { css } from '@emotion/react';
+import isWindow from '../../utils/scrollTop';
 
 const FormStyle = styled.form`
   width: 100%;
@@ -35,6 +36,13 @@ const SearchInput: React.FC = () => {
       like: `%${input}%`,
     });
     setShowSearch(input);
+    isWindow() && window.scrollTo({ top: 0 });
+  };
+
+  const onEnter = (e: any) => {
+    if (e.key === 'Enter') {
+      e.target.blur();
+    }
   };
 
   const handleChange = (e: any) => {
@@ -53,7 +61,9 @@ const SearchInput: React.FC = () => {
           name="search"
           id="search"
           value={input}
+          onKeyUp={onEnter}
           onChange={handleChange}
+          enterKeyHint="search"
           placeholder="Search contact"
         />
         <Button type="submit" role="secondary" h={40}>
