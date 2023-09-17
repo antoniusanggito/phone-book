@@ -1,12 +1,11 @@
 import { css } from '@emotion/react';
 import { Dialog } from '@headlessui/react';
 import React from 'react';
-import { IContact } from '../../../types/types';
+import { FormValues, IContact } from '../../../types/types';
 import { useEditContactMutation } from '../../../generated/graphql';
 import { useForm } from 'react-hook-form';
 import Button from '../../shared/Button';
 import styled from '@emotion/styled';
-import { FormValues } from '../../AddForm';
 import toast from 'react-hot-toast';
 import { exclSpChar } from '../../../utils/filterKeyInput';
 

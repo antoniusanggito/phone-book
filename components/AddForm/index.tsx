@@ -7,42 +7,13 @@ import Button from '../shared/Button';
 import toast from 'react-hot-toast';
 import { exclSpChar, phoneNum } from '../../utils/filterKeyInput';
 import { useRouter } from 'next/router';
-
-export type FormValues = {
-  firstName: string;
-  lastName: string;
-  phones: {
-    number: string;
-  }[];
-};
+import { FormValues } from '../../types/types';
 
 const initialFormValues = {
   firstName: '',
   lastName: '',
   phones: [{ number: '' }],
 };
-
-const FormWrapper = styled.section`
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  /* border: 1px solid #bbb; */
-  padding: 0.5rem;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  input[type='text'],
-  input[type='tel'] {
-    width: 100%;
-    height: 2.5rem;
-    padding: 0 10px;
-  }
-`;
 
 const AddForm: React.FC = () => {
   const { push } = useRouter();
@@ -219,5 +190,27 @@ const AddForm: React.FC = () => {
     </FormWrapper>
   );
 };
+
+const FormWrapper = styled.section`
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  /* border: 1px solid #bbb; */
+  padding: 0.5rem;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  input[type='text'],
+  input[type='tel'] {
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 10px;
+  }
+`;
 
 export default AddForm;

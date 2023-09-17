@@ -13,4 +13,12 @@ interface IFavContact extends IContact {
   isFav: boolean;
 }
 
-export type { IContact, IPhone, IFavContact };
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  phones: {
+    number: string;
+  }[];
+}
+
+export type { IContact, IPhone, IFavContact, FormValues };

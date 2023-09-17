@@ -17,7 +17,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ isFav, contact }) => {
   const { id, first_name, last_name, phones } = contact;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
+  const { setFav } = (useContext(FavContext) as FavContextType) ?? {};
 
   const [deleteContact] = useDeleteContactMutation({
     variables: { id },
