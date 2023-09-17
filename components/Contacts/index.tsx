@@ -10,7 +10,7 @@ import {
   PaginationContext,
   PaginationContextType,
 } from '../context/paginationContext';
-import getFavIds from '../../utils/getFavIdQuery';
+import getArrFavIds from '../../utils/getArrFavIds';
 import { fullCenter } from '../../styles/commonStyles';
 import { css } from '@emotion/react';
 import PaginationContainer from './PaginationContainer';
@@ -32,14 +32,15 @@ const ContactList: React.FC = () => {
   ] = useGetRegContactsLazyQuery();
 
   useEffect(() => {
+    const favIds = getArrFavIds(fav);
     getFavContacts({
-      variables: { favIds: getFavIds(fav), like: pagination.like },
+      variables: { favIds, like: pagination.like },
     });
     getRegContacts({
       variables: {
         offset: pagination.offset,
         limit,
-        favIds: getFavIds(fav),
+        favIds,
         like: pagination.like,
       },
     });

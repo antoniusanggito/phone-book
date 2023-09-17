@@ -90,9 +90,9 @@ const AddForm: React.FC = () => {
     // ],
   });
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     sessionStorage.removeItem('PAGE'); // reset pagination state
-    addContact({
+    await addContact({
       variables: {
         first_name: data.firstName,
         last_name: data.lastName,

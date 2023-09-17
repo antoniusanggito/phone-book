@@ -25,6 +25,7 @@ const Card: React.FC<CardProps> = ({ isFav, contact }) => {
       toast.success(
         `Deleted contact ${data.delete_contact_by_pk?.first_name} ${data.delete_contact_by_pk?.last_name}`
       );
+      setFav((prev) => ({ ...prev, [id]: !prev[id] }));
     },
     // delete contact cache to re-request updated pagination
     update(cache) {
@@ -47,7 +48,7 @@ const Card: React.FC<CardProps> = ({ isFav, contact }) => {
 
   const toggleFav = () => {
     setFav((prev) => {
-      const prevFav = fav[id];
+      const prevFav = prev[id];
       if (prevFav) {
         toast.success(`Removed ${first_name} ${last_name} from favorite`);
       } else {
@@ -59,7 +60,6 @@ const Card: React.FC<CardProps> = ({ isFav, contact }) => {
 
   const handleDelete = async () => {
     await deleteContact();
-    delete fav[id];
   };
 
   const handleOpenModal = () => {
