@@ -28,9 +28,12 @@ describe('useGetRegContactsQuery() hook call', () => {
     expect(
       screen.getByText(regContactsMock.contact[0].first_name)
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(regContactsMock.contact_aggregate.aggregate.count)
+    ).toBeInTheDocument();
   });
 
-  it('should return error when failed', async () => {
+  it('should return only error when failed', async () => {
     render(
       <MockedProvider mocks={errorRegContactsMock} addTypename={false}>
         <MockRegContactsComponent />
@@ -42,5 +45,11 @@ describe('useGetRegContactsQuery() hook call', () => {
     });
 
     expect(screen.getByText('An error occured')).toBeInTheDocument();
+    expect(
+      screen.queryByText(regContactsMock.contact[0].first_name)
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(regContactsMock.contact_aggregate.aggregate.count)
+    ).not.toBeInTheDocument();
   });
 });

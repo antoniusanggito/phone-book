@@ -30,7 +30,7 @@ describe('useGetFavContactsQuery() hook call', () => {
     ).toBeInTheDocument();
   });
 
-  it('should return error when failed', async () => {
+  it('should return only error when failed', async () => {
     render(
       <MockedProvider mocks={errorFavContactsMock} addTypename={false}>
         <MockFavContactsComponent />
@@ -42,5 +42,8 @@ describe('useGetFavContactsQuery() hook call', () => {
     });
 
     expect(screen.getByText('An error occured')).toBeInTheDocument();
+    expect(
+      screen.queryByText(favContactsMock.contact[0].first_name)
+    ).not.toBeInTheDocument();
   });
 });

@@ -49,6 +49,7 @@ export const MockRegContactsComponent: React.FC = () => {
       {data?.contact.map((contact) => (
         <p key={contact.id}>{contact.first_name}</p>
       ))}
+      <p>{data?.contact_aggregate.aggregate?.count}</p>
     </div>
   );
 };
