@@ -71,6 +71,8 @@ const AddForm: React.FC = () => {
     });
   });
 
+  console.log(errors.phones);
+
   return (
     <FormWrapper>
       <div
@@ -89,26 +91,32 @@ const AddForm: React.FC = () => {
             gap: 0.25rem;
           `}
         >
-          <input
-            type="text"
-            id="firstName"
-            placeholder="First Name"
-            maxLength={20}
-            onKeyDown={exclSpChar}
-            {...register('firstName', {
-              required: '*First Name is required',
-            })}
-          />
-          <input
-            type="text"
-            id="lastName"
-            placeholder="Last Name"
-            maxLength={20}
-            onKeyDown={exclSpChar}
-            {...register('lastName', {
-              required: '*Last Name is required',
-            })}
-          />
+          <div>
+            <input
+              type="text"
+              id="firstName"
+              placeholder="First Name"
+              maxLength={20}
+              onKeyDown={exclSpChar}
+              {...register('firstName', {
+                required: '*First Name is required',
+              })}
+            />
+            {errors.firstName && <p>{`${errors.firstName.message}`}</p>}
+          </div>
+          <div>
+            <input
+              type="text"
+              id="lastName"
+              placeholder="Last Name"
+              maxLength={20}
+              onKeyDown={exclSpChar}
+              {...register('lastName', {
+                required: '*Last Name is required',
+              })}
+            />
+            {errors.lastName && <p>{`${errors.lastName.message}`}</p>}
+          </div>
         </div>
         <div
           css={css`
@@ -123,7 +131,7 @@ const AddForm: React.FC = () => {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-                align-items: center;
+                align-items: flex-end;
                 gap: 0.25rem;
               `}
               key={index}
@@ -137,26 +145,35 @@ const AddForm: React.FC = () => {
                   -
                 </Button>
               )}
-              <input
-                type="tel"
-                id={`phones.${index}`}
-                maxLength={20}
-                placeholder={
-                  index > 0 ? `Phone Number ${index + 1}` : 'Phone Number'
-                }
-                onKeyDown={phoneNum}
-                {...register(`phones.${index}.number` as const, {
-                  required: 'Input Phone Number',
-                  pattern: {
-                    value: /^[0-9\b+\-.]+$/,
-                    message: '*Phone number is invalid',
-                  },
-                  minLength: {
-                    value: 3,
-                    message: '*Phone number is invalid',
-                  },
-                })}
-              />
+              <div
+                css={css`
+                  flex-grow: 1;
+                `}
+              >
+                <input
+                  type="tel"
+                  id={`phones.${index}`}
+                  maxLength={20}
+                  placeholder={
+                    index > 0 ? `Phone Number ${index + 1}` : 'Phone Number'
+                  }
+                  onKeyDown={phoneNum}
+                  {...register(`phones.${index}.number` as const, {
+                    required: '*Phone number is invalid',
+                    pattern: {
+                      value: /^[0-9\b+\-.]+$/,
+                      message: '*Phone number is invalid',
+                    },
+                    minLength: {
+                      value: 3,
+                      message: '*Phone number is invalid',
+                    },
+                  })}
+                />
+                {errors.phones && (
+                  <p>{errors.phones[index]?.number?.message}</p>
+                )}
+              </div>
               {index == 0 && (
                 <Button
                   type="button"
@@ -177,10 +194,7 @@ const AddForm: React.FC = () => {
             margin-top: 0.5rem;
           `}
         >
-          <div>
-            {errors.firstName && <p>{`${errors.firstName.message}`}</p>}
-            {errors.lastName && <p>{`${errors.lastName.message}`}</p>}
-          </div>
+          <div></div>
           <Button type="submit" role="secondary" w={80} h={40}>
             Submit
           </Button>

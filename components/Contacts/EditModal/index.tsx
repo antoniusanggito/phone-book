@@ -73,7 +73,7 @@ const EditModal: React.FC<EditModalProps> = ({
       css={modalStyle}
       initialFocus={undefined}
       open={isOpen}
-      onClose={handleCancel}
+      onClose={() => {}}
     >
       <Dialog.Panel css={modalContentStyle}>
         <Dialog.Title>
