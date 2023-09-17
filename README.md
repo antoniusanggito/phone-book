@@ -29,9 +29,9 @@ npm run test
 ## Additional Info
 
 - App is downloadable from browser as a working simple PWA and its configured manifest. Could possibly be built to an actual mobile app, better with more improved offline handling configuration, connecting to a specific mobile API, etc. for more native capability.
-- Next.js 12 is used because of more familiarity in working especially with Apollo Client than the new Next.js 13 integration, also more opportunity to optimize more easily for future commercial use such as SEO, SSR/ISR/SSG feature, static handling.
+- Next.js 12 is used because of more familiarity in working especially with Apollo Client than the new Next.js 13 integration, also more opportunity to optimize more easily for future commercial use such as SEO, SSR/ISR/SSG feature, static handling, lazy/dynamic loading.
 - Tests include unit testing apollo client hook, displayed component, form handling, with data, component, or necessary function mocking. Although some utility functions, components, and functional/integration testing between different components and more realistic user interaction are still open to improvement.
-- Development is with UI/UX with obvious limited capability. App is responsive to be viewed on mobile first and also desktop. Most noticable room for improvement is for form layout.
+- Development is with UI/UX considered but with limited capability. Most noticable room for improvement could be on the form layout. However app is responsive to be used on mobile first and also quite pleasant on desktop.
 
 ## Deployment
 
