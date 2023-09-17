@@ -6,7 +6,7 @@ import { useAddContactMutation } from '../../generated/graphql';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
 
-type FormValues = {
+export type FormValues = {
   firstName: string;
   lastName: string;
   phones: {

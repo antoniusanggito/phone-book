@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { IFavContact } from '../../types/types';
+import React, { useContext, useState } from 'react';
+import { IContact } from '../../types/types';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { css } from '@emotion/react';
@@ -7,7 +7,12 @@ import { FavContext, FavContextType } from '../context/favContext';
 import { clickable } from '../../styles/commonStyles';
 import { useDeleteContactMutation } from '../../generated/graphql';
 import toast from 'react-hot-toast';
-import scrollTop from '../../utils/scrollTop';
+import EditModal from './EditModal';
+
+interface CardProps {
+  isFav: boolean;
+  contact: IContact;
+}
 
 const CardStyle = styled.div`
   display: grid;
@@ -21,15 +26,15 @@ const CardStyle = styled.div`
   &:last-child {
     border-bottom: none;
   }
+
+  &:hover {
+    background-color: var(--clr-background);
+  }
 `;
 
-const Card: React.FC<IFavContact> = ({
-  isFav,
-  id,
-  first_name,
-  last_name,
-  phones,
-}) => {
+const Card: React.FC<CardProps> = ({ isFav, contact }) => {
+  const { id, first_name, last_name, phones } = contact;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { fav, setFav } = (useContext(FavContext) as FavContextType) ?? {};
 
   const [deleteContact] = useDeleteContactMutation({
@@ -75,8 +80,13 @@ const Card: React.FC<IFavContact> = ({
     delete fav[id];
   };
 
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+
   return (
     <CardStyle key={id}>
+      <EditModal isOpen={isOpen} setIsOpen={setIsOpen} contact={contact} />
       <div
         css={css`
           justify-self: center;
@@ -104,7 +114,12 @@ const Card: React.FC<IFavContact> = ({
           />
         )}
       </div>
-      <div>
+      <div
+        css={css`
+          cursor: pointer;
+        `}
+        onClick={handleOpenModal}
+      >
         <h4>
           {first_name} {last_name}
         </h4>

@@ -62,14 +62,7 @@ const ContactsSection: React.FC = () => {
           {errorFav && <div css={fullCenter}>{errorFav?.message}</div>}
           <h3>Favorites ({dataFav?.contact.length})</h3>
           {dataFav?.contact.map((contact: any) => (
-            <Card
-              key={contact.id}
-              isFav={fav[contact.id]}
-              id={contact.id}
-              first_name={contact.first_name}
-              last_name={contact.last_name}
-              phones={contact.phones}
-            />
+            <Card key={contact.id} isFav={fav[contact.id]} contact={contact} />
           ))}
 
           <h3
@@ -80,14 +73,7 @@ const ContactsSection: React.FC = () => {
             Others
           </h3>
           {dataReg?.contact.map((contact: any) => (
-            <Card
-              key={contact.id}
-              isFav={fav[contact.id]}
-              id={contact.id}
-              first_name={contact.first_name}
-              last_name={contact.last_name}
-              phones={contact.phones}
-            />
+            <Card key={contact.id} isFav={fav[contact.id]} contact={contact} />
           ))}
         </div>
 

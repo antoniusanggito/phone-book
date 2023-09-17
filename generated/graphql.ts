@@ -2284,6 +2284,14 @@ export type DeleteContactMutationVariables = Exact<{
 
 export type DeleteContactMutation = { __typename?: 'mutation_root', delete_contact_by_pk?: { __typename?: 'contact', id: number, first_name: string, last_name: string } | null };
 
+export type EditContactMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  _set?: InputMaybe<Contact_Set_Input>;
+}>;
+
+
+export type EditContactMutation = { __typename?: 'mutation_root', update_contact_by_pk?: { __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> } | null };
+
 export type CoreContactFieldsFragment = { __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> };
 
 export type GetFavContactsQueryVariables = Exact<{
@@ -2430,6 +2438,45 @@ export function useDeleteContactMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteContactMutationHookResult = ReturnType<typeof useDeleteContactMutation>;
 export type DeleteContactMutationResult = Apollo.MutationResult<DeleteContactMutation>;
 export type DeleteContactMutationOptions = Apollo.BaseMutationOptions<DeleteContactMutation, DeleteContactMutationVariables>;
+export const EditContactDocument = gql`
+    mutation EditContact($id: Int!, $_set: contact_set_input) {
+  update_contact_by_pk(pk_columns: {id: $id}, _set: $_set) {
+    id
+    first_name
+    last_name
+    phones {
+      number
+    }
+  }
+}
+    `;
+export type EditContactMutationFn = Apollo.MutationFunction<EditContactMutation, EditContactMutationVariables>;
+
+/**
+ * __useEditContactMutation__
+ *
+ * To run a mutation, you first call `useEditContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editContactMutation, { data, loading, error }] = useEditContactMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      _set: // value for '_set'
+ *   },
+ * });
+ */
+export function useEditContactMutation(baseOptions?: Apollo.MutationHookOptions<EditContactMutation, EditContactMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditContactMutation, EditContactMutationVariables>(EditContactDocument, options);
+      }
+export type EditContactMutationHookResult = ReturnType<typeof useEditContactMutation>;
+export type EditContactMutationResult = Apollo.MutationResult<EditContactMutation>;
+export type EditContactMutationOptions = Apollo.BaseMutationOptions<EditContactMutation, EditContactMutationVariables>;
 export const GetFavContactsDocument = gql`
     query GetFavContacts($favIds: [Int!], $like: String) {
   contact(
