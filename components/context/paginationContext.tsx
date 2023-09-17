@@ -12,7 +12,7 @@ export interface PaginationContextType {
   setPagination: React.Dispatch<React.SetStateAction<PaginationType>>;
 }
 
-interface PaginationProviderProps {
+export interface PaginationProviderProps {
   children: React.ReactNode;
 }
 
