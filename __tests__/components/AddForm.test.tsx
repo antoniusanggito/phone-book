@@ -34,25 +34,26 @@ describe('AddForm element render', () => {
     expect(phonesInput).toHaveValue('081');
   });
 
-  it('should reset form after submit', async () => {
-    render(<AddForm />);
+  // Not desired behavior, reset only when hook success
+  // it('should reset form after submit', async () => {
+  //   render(<AddForm />);
 
-    const firstNameInput = screen.getByPlaceholderText('First Name');
-    const lastNameInput = screen.getByPlaceholderText('Last Name');
-    const phonesInput = screen.getByPlaceholderText('Phone Number');
-    const submitBtn = screen.getByText('Submit');
+  //   const firstNameInput = screen.getByPlaceholderText('First Name');
+  //   const lastNameInput = screen.getByPlaceholderText('Last Name');
+  //   const phonesInput = screen.getByPlaceholderText('Phone Number');
+  //   const submitBtn = screen.getByText('Submit');
 
-    fireEvent.change(firstNameInput, { target: { value: 'John' } });
-    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
-    fireEvent.change(phonesInput, { target: { value: '081' } });
-    fireEvent.click(submitBtn);
+  //   fireEvent.change(firstNameInput, { target: { value: 'John' } });
+  //   fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+  //   fireEvent.change(phonesInput, { target: { value: '081' } });
+  //   fireEvent.click(submitBtn);
 
-    await act(async () => {
-      await waitForData();
-    });
+  //   await act(async () => {
+  //     await waitForData();
+  //   });
 
-    expect(firstNameInput).toHaveValue('');
-    expect(lastNameInput).toHaveValue('');
-    expect(phonesInput).toHaveValue('');
-  });
+  //   expect(firstNameInput).toHaveValue('');
+  //   expect(lastNameInput).toHaveValue('');
+  //   expect(phonesInput).toHaveValue('');
+  // });
 });
