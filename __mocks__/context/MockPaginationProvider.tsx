@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   PaginationContext,
-  PaginationProviderProps,
   PaginationType,
 } from '../../components/context/paginationContext';
 

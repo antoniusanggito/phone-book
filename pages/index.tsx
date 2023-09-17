@@ -1,7 +1,4 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
-
-import styled from '@emotion/styled';
 import SearchInput from '../components/Contacts/SearchInput';
 import ContactsSection from '../components/Contacts';
 import FavProvider from '../components/context/favContext';
