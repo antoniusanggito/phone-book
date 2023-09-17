@@ -205,16 +205,9 @@ const AddForm: React.FC = () => {
             {errors.firstName && <p>{`${errors.firstName.message}`}</p>}
             {errors.lastName && <p>{`${errors.lastName.message}`}</p>}
           </div>
-          <input
-            css={css`
-              width: fit-content;
-              padding: 4px 6px;
-              background-color: var(--clr-secondary);
-              color: #fff;
-            `}
-            type="submit"
-            value="Submit"
-          />
+          <Button type="submit" role="secondary" w={80} h={40}>
+            Submit
+          </Button>
         </div>
       </form>
     </FormWrapper>

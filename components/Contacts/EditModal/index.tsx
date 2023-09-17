@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Dialog } from '@headlessui/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { IContact } from '../../../types/types';
 import { useEditContactMutation } from '../../../generated/graphql';
 import { useForm } from 'react-hook-form';
@@ -65,6 +65,16 @@ const EditModal: React.FC<EditModalProps> = ({
   contact,
 }) => {
   const { id, first_name, last_name, phones } = contact;
+  const ref = useRef<HTMLHeadingElement | null>(null);
+
+  useEffect(() => {
+    ref.current?.focus();
+    // if (document.activeElement) {
+    //   const ref = document.activeElement as HTMLInputElement;
+    //   ref.blur();
+    // }
+  }, [ref]);
+
   const [editContact, { data, loading, error }] = useEditContactMutation({
     onCompleted: (data) => {
       toast.success(
@@ -112,7 +122,12 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   return (
-    <Dialog css={modalStyle} open={isOpen} onClose={handleCancel}>
+    <Dialog
+      css={modalStyle}
+      initialFocus={undefined}
+      open={isOpen}
+      onClose={handleCancel}
+    >
       <Dialog.Panel css={modalContentStyle}>
         <Dialog.Title>
           {first_name} {last_name}
@@ -123,7 +138,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
         <FormStyle onSubmit={onSubmit}>
           <div>
-            <label htmlFor="firstName">First Name:</label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
               id="firstName"
@@ -133,10 +148,11 @@ const EditModal: React.FC<EditModalProps> = ({
               {...register('firstName', {
                 required: '*First Name is required',
               })}
+              tabIndex={-1}
             />
           </div>
           <div>
-            <label htmlFor="lastName">Last Name:</label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               type="text"
               id="lastName"
@@ -146,6 +162,7 @@ const EditModal: React.FC<EditModalProps> = ({
               {...register('lastName', {
                 required: '*Last Name is required',
               })}
+              tabIndex={-1}
             />
           </div>
           <div
@@ -166,10 +183,16 @@ const EditModal: React.FC<EditModalProps> = ({
                 gap: 0.5rem;
               `}
             >
-              <Button type="button" role="tertiary" onClick={handleCancel}>
+              <Button
+                type="button"
+                role="tertiary"
+                onClick={handleCancel}
+                w={80}
+                h={40}
+              >
                 Cancel
               </Button>
-              <Button type="submit" role="secondary">
+              <Button type="submit" role="secondary" w={80} h={40}>
                 Submit
               </Button>
             </div>
