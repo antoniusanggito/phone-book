@@ -32,7 +32,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en" dir="ltr">
         <Head>
-          <link rel="mask-icon" href="/icon-192x192.png" color="#5bbad5" />
+          <link rel="mask-icon" href="/icon-192x192.png" color="#edf1d6" />
           <meta name="msapplication-TileColor" content="#FFFFFF" />
 
           <meta name="application-name" content={APP_NAME} />
