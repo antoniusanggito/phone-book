@@ -4,5 +4,8 @@ import Header from '../components/Header';
 it('renders header', () => {
   render(<Header />);
 
-  expect(screen.getByText('Contacts')).toBeInTheDocument();
+  const title = screen.getByRole('heading', { level: 1 });
+
+  expect(screen.getByRole('banner')).toHaveStyle('position: sticky');
+  expect(screen.getByRole('banner')).toContainElement(title);
 });

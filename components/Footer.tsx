@@ -6,7 +6,6 @@ const FooterStyle = styled.footer`
   padding: 2rem 0;
   background-color: var(--clr-background);
   box-shadow: 3px 3px 3px 3px var(--clr-background);
-  font-weight: lighter;
 
   a {
     display: flex;
