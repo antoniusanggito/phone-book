@@ -20,7 +20,7 @@ export const PaginationContext = createContext<PaginationContextType | {}>({});
 
 function initState() {
   if (typeof window !== 'undefined') {
-    const pagination = localStorage.getItem('PAGE');
+    const pagination = sessionStorage.getItem('PAGE');
     return pagination ? JSON.parse(pagination) : { offset: 0, like: '%%' };
   }
   return {};
@@ -34,7 +34,7 @@ const PaginationProvider: React.FC<PaginationProviderProps> = ({
   const page = pagination.offset / limit + 1;
 
   useEffect(() => {
-    localStorage.setItem('PAGE', JSON.stringify(pagination));
+    sessionStorage.setItem('PAGE', JSON.stringify(pagination));
   }, [pagination]);
 
   return (

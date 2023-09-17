@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import SearchInput from '../components/Contacts/SearchInput';
-import ContactsSection from '../components/Contacts';
+import ContactList from '../components/Contacts';
 import FavProvider from '../components/context/favContext';
 import PaginationProvider from '../components/context/paginationContext';
 import AddButton from '../components/AddButton';
@@ -12,7 +12,7 @@ const Home: NextPage = () => {
       <FavProvider>
         <PaginationProvider>
           <SearchInput />
-          <ContactsSection />
+          <ContactList />
           <AddButton />
         </PaginationProvider>
       </FavProvider>

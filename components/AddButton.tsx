@@ -1,7 +1,5 @@
-import styled from '@emotion/styled';
 import Image from 'next/image';
 import React from 'react';
-import { fullCenter } from '../styles/commonStyles';
 import Link from 'next/link';
 import Button from './shared/Button';
 import { css } from '@emotion/react';

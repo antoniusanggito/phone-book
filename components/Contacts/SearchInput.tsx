@@ -11,7 +11,7 @@ import isWindow from '../../utils/scrollTop';
 
 function initInput() {
   if (typeof window !== 'undefined') {
-    const input = localStorage.getItem('PAGE');
+    const input = sessionStorage.getItem('PAGE');
     return input ? JSON.parse(input).like.slice(1, -1) : '';
   }
   return '';

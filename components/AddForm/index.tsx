@@ -91,7 +91,7 @@ const AddForm: React.FC = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    localStorage.removeItem('PAGE'); // reset pagination state
+    sessionStorage.removeItem('PAGE'); // reset pagination state
     addContact({
       variables: {
         first_name: data.firstName,
