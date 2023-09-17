@@ -1,16 +1,16 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import AddForm from '../../components/AddForm';
-import waitForData from '../../utils/waitForData';
 
 global.scrollTo = jest.fn();
 
 jest.mock('@apollo/client', () => {
-  // const data = { };
+  const data = {};
   return {
     __esModule: true,
     ...jest.requireActual('@apollo/client'),
     // useQuery: jest.fn(() => ({ data })),
     useMutation: jest.fn(() => [jest.fn(), null]),
+    useLazyQuery: jest.fn(() => [jest.fn(), data]),
   };
 });
 
