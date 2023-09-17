@@ -2,7 +2,10 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useAddContactMutation } from '../../generated/graphql';
+import {
+  useAddContactMutation,
+  useCheckContactLazyQuery,
+} from '../../generated/graphql';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
 import { exclSpChar, phoneNum } from '../../utils/filterKeyInput';
@@ -29,6 +32,8 @@ const AddForm: React.FC = () => {
     name: 'phones',
     control,
   });
+
+  const [checkContact] = useCheckContactLazyQuery();
 
   const [addContact] = useAddContactMutation({
     onCompleted: (data) => {
@@ -61,17 +66,24 @@ const AddForm: React.FC = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    sessionStorage.removeItem('PAGE'); // reset pagination state
-    await addContact({
-      variables: {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        phones: data.phones,
-      },
+    const res = await checkContact({
+      variables: { first_name: data.firstName, last_name: data.lastName },
     });
+    if (res.data?.contact.length === 0) {
+      sessionStorage.removeItem('PAGE'); // reset pagination state
+      await addContact({
+        variables: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          phones: data.phones,
+        },
+      });
+    } else {
+      toast.error(
+        `Contact with name ${data.firstName} ${data.lastName} already exist!`
+      );
+    }
   });
-
-  console.log(errors.phones);
 
   return (
     <FormWrapper>

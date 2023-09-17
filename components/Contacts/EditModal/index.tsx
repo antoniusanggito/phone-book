@@ -2,7 +2,10 @@ import { css } from '@emotion/react';
 import { Dialog } from '@headlessui/react';
 import React from 'react';
 import { FormValues, IContact } from '../../../types/types';
-import { useEditContactMutation } from '../../../generated/graphql';
+import {
+  useCheckContactLazyQuery,
+  useEditContactMutation,
+} from '../../../generated/graphql';
 import { useForm } from 'react-hook-form';
 import Button from '../../shared/Button';
 import styled from '@emotion/styled';
@@ -21,6 +24,8 @@ const EditModal: React.FC<EditModalProps> = ({
   contact,
 }) => {
   const { id, first_name, last_name, phones } = contact;
+
+  const [checkContact] = useCheckContactLazyQuery();
 
   const [editContact, { data, loading, error }] = useEditContactMutation({
     onCompleted: (data) => {
@@ -50,17 +55,26 @@ const EditModal: React.FC<EditModalProps> = ({
     },
   });
 
-  const onSubmit = handleSubmit((data) => {
-    editContact({
-      variables: {
-        id,
-        _set: {
-          first_name: data.firstName,
-          last_name: data.lastName,
-        },
-      },
+  const onSubmit = handleSubmit(async (data) => {
+    const res = await checkContact({
+      variables: { first_name: data.firstName, last_name: data.lastName },
     });
-    setIsOpen(false);
+    if (res.data?.contact.length === 0) {
+      editContact({
+        variables: {
+          id,
+          _set: {
+            first_name: data.firstName,
+            last_name: data.lastName,
+          },
+        },
+      });
+      setIsOpen(false);
+    } else {
+      toast.error(
+        `Contact with name ${data.firstName} ${data.lastName} already exist!`
+      );
+    }
   });
 
   const handleCancel = () => {

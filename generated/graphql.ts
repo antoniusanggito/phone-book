@@ -2270,6 +2270,14 @@ export type AddContactMutationVariables = Exact<{
 
 export type AddContactMutation = { __typename?: 'mutation_root', insert_contact?: { __typename?: 'contact_mutation_response', returning: Array<{ __typename?: 'contact', id: number, first_name: string, last_name: string, phones: Array<{ __typename?: 'phone', number: string }> }> } | null };
 
+export type CheckContactQueryVariables = Exact<{
+  first_name: Scalars['String']['input'];
+  last_name: Scalars['String']['input'];
+}>;
+
+
+export type CheckContactQuery = { __typename?: 'query_root', contact: Array<{ __typename?: 'contact', id: number }> };
+
 export type CountRegContactsQueryVariables = Exact<{
   favIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
 }>;
@@ -2366,6 +2374,45 @@ export function useAddContactMutation(baseOptions?: Apollo.MutationHookOptions<A
 export type AddContactMutationHookResult = ReturnType<typeof useAddContactMutation>;
 export type AddContactMutationResult = Apollo.MutationResult<AddContactMutation>;
 export type AddContactMutationOptions = Apollo.BaseMutationOptions<AddContactMutation, AddContactMutationVariables>;
+export const CheckContactDocument = gql`
+    query checkContact($first_name: String!, $last_name: String!) {
+  contact(
+    limit: 1
+    where: {_and: [{first_name: {_eq: $first_name}}, {last_name: {_eq: $last_name}}]}
+  ) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useCheckContactQuery__
+ *
+ * To run a query within a React component, call `useCheckContactQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckContactQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckContactQuery({
+ *   variables: {
+ *      first_name: // value for 'first_name'
+ *      last_name: // value for 'last_name'
+ *   },
+ * });
+ */
+export function useCheckContactQuery(baseOptions: Apollo.QueryHookOptions<CheckContactQuery, CheckContactQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckContactQuery, CheckContactQueryVariables>(CheckContactDocument, options);
+      }
+export function useCheckContactLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckContactQuery, CheckContactQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckContactQuery, CheckContactQueryVariables>(CheckContactDocument, options);
+        }
+export type CheckContactQueryHookResult = ReturnType<typeof useCheckContactQuery>;
+export type CheckContactLazyQueryHookResult = ReturnType<typeof useCheckContactLazyQuery>;
+export type CheckContactQueryResult = Apollo.QueryResult<CheckContactQuery, CheckContactQueryVariables>;
 export const CountRegContactsDocument = gql`
     query CountRegContacts($favIds: [Int!]) {
   contact_aggregate(where: {id: {_nin: $favIds}}) {
