@@ -8,6 +8,7 @@ import Button from '../../shared/Button';
 import styled from '@emotion/styled';
 import { FormValues } from '../../AddForm';
 import toast from 'react-hot-toast';
+import { exclSpChar } from '../../../utils/filterKeyInput';
 
 interface EditModalProps {
   isOpen: boolean;
@@ -70,6 +71,9 @@ const EditModal: React.FC<EditModalProps> = ({
         `Updated contact ${data.update_contact_by_pk?.first_name} ${data.update_contact_by_pk?.last_name}`
       );
     },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   const {
@@ -121,6 +125,7 @@ const EditModal: React.FC<EditModalProps> = ({
               id="firstName"
               placeholder="First Name"
               maxLength={20}
+              onKeyDown={exclSpChar}
               {...register('firstName', {
                 required: '*First Name is required',
               })}
@@ -133,6 +138,7 @@ const EditModal: React.FC<EditModalProps> = ({
               id="lastName"
               placeholder="Last Name"
               maxLength={20}
+              onKeyDown={exclSpChar}
               {...register('lastName', {
                 required: '*Last Name is required',
               })}

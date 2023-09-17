@@ -5,6 +5,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useAddContactMutation } from '../../generated/graphql';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
+import { exclSpChar, phoneNum } from '../../utils/filterKeyInput';
 
 export type FormValues = {
   firstName: string;
@@ -58,9 +59,13 @@ const AddForm: React.FC = () => {
 
   const [addContact] = useAddContactMutation({
     onCompleted: (data) => {
+      reset();
       toast.success(
         `Added contact ${data.insert_contact?.returning[0].first_name} ${data.insert_contact?.returning[0].last_name}`
       );
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
     // delete contact cache to re-request updated pagination
     update(cache) {
@@ -89,7 +94,6 @@ const AddForm: React.FC = () => {
         phones: data.phones,
       },
     });
-    reset();
   });
 
   return (
@@ -114,6 +118,7 @@ const AddForm: React.FC = () => {
             id="firstName"
             placeholder="First Name"
             maxLength={20}
+            onKeyDown={exclSpChar}
             {...register('firstName', {
               required: '*First Name is required',
             })}
@@ -123,6 +128,7 @@ const AddForm: React.FC = () => {
             id="lastName"
             placeholder="Last Name"
             maxLength={20}
+            onKeyDown={exclSpChar}
             {...register('lastName', {
               required: '*Last Name is required',
             })}
@@ -162,15 +168,16 @@ const AddForm: React.FC = () => {
                 placeholder={
                   index > 0 ? `Phone Number ${index + 1}` : 'Phone Number'
                 }
+                onKeyDown={phoneNum}
                 {...register(`phones.${index}.number` as const, {
                   required: 'Input Phone Number',
                   pattern: {
                     value: /^[0-9\b+\-.]+$/,
-                    message: 'Input a valid phone number',
+                    message: '*Phone number is invalid',
                   },
                   minLength: {
                     value: 3,
-                    message: 'Input a valid phone number',
+                    message: '*Phone number is invalid',
                   },
                 })}
               />
