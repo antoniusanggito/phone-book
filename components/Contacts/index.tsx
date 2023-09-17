@@ -14,6 +14,10 @@ import getArrFavIds from '../../utils/getArrFavIds';
 import { fullCenter } from '../../styles/commonStyles';
 import { css } from '@emotion/react';
 import PaginationContainer from './PaginationContainer';
+import { addApolloState, initializeApollo } from '../../lib/apolloClient';
+import { GET_FAV_CONTACTS } from '../../graphql/getFavContacts';
+import { GET_REG_CONTACTS } from '../../graphql/getRegContacts';
+import { GetServerSideProps } from 'next';
 
 const ContactList: React.FC = () => {
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
@@ -44,7 +48,7 @@ const ContactList: React.FC = () => {
         like: pagination.like,
       },
     });
-  }, [getFavContacts, getRegContacts, pagination, fav]);
+  }, [pagination, fav]);
 
   return (
     <>
@@ -90,6 +94,31 @@ const ContactList: React.FC = () => {
       </ContactListStyle>
     </>
   );
+};
+
+// initial query SSR not yet working
+export const getServerSideProps: GetServerSideProps = async () => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: GET_FAV_CONTACTS,
+    variables: { favIds: [], like: '%%' },
+  });
+  await apolloClient.query({
+    query: GET_REG_CONTACTS,
+    variables: {
+      offset: 0,
+      limit: 10,
+      favIds: [],
+      like: '%%',
+    },
+  });
+
+  const documentProps = addApolloState(apolloClient, {
+    props: {},
+  });
+
+  return documentProps;
 };
 
 const ContactListStyle = styled.section`

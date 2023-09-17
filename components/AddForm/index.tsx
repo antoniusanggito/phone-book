@@ -41,13 +41,12 @@ const AddForm: React.FC = () => {
     onError: (error) => {
       toast.error(error.message);
     },
-    // NOT NEEDED BECAUSE OF REDIRECT DIFF PAGE
-    // // delete contact cache to re-request updated pagination
-    // update(cache) {
-    //   cache.evict({ fieldName: 'contact' });
-    //   cache.gc();
-    // },
-    // // manula refetch
+    // delete contact cache to re-request updated pagination
+    update(cache) {
+      cache.evict({ fieldName: 'contact' });
+      cache.gc();
+    },
+    // // manual refetch
     // refetchQueries: [
     //   {
     //     query: GET_REG_CONTACTS,

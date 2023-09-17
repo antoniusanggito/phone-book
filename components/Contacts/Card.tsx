@@ -32,7 +32,7 @@ const Card: React.FC<CardProps> = ({ isFav, contact }) => {
       cache.evict({ fieldName: 'contact' });
       cache.gc();
     },
-    // // not needed to refetch after deleting cache
+    // // manual refetch
     // refetchQueries: [
     //   {
     //     query: GET_REG_CONTACTS,
