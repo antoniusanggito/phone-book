@@ -9,12 +9,15 @@ const fullCenter = css`
 
 const clickable = css`
   cursor: pointer;
-  user-drag: none;
-  -webkit-user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  transition: 0.15s;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 `;
 
 const stickyDiv = css`

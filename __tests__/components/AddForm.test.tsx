@@ -14,6 +14,15 @@ jest.mock('@apollo/client', () => {
   };
 });
 
+jest.mock('next/router', () => ({
+  useRouter() {
+    return {
+      pathname: '',
+      push: '/',
+    };
+  },
+}));
+
 describe('AddForm element render', () => {
   it('should update input values correctly', async () => {
     render(<AddForm />);

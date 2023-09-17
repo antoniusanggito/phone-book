@@ -6,6 +6,7 @@ import { useAddContactMutation } from '../../generated/graphql';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
 import { exclSpChar, phoneNum } from '../../utils/filterKeyInput';
+import { useRouter } from 'next/router';
 
 export type FormValues = {
   firstName: string;
@@ -44,6 +45,7 @@ const FormWrapper = styled.section`
 `;
 
 const AddForm: React.FC = () => {
+  const { push } = useRouter();
   const {
     register,
     control,
@@ -63,16 +65,18 @@ const AddForm: React.FC = () => {
       toast.success(
         `Added contact ${data.insert_contact?.returning[0].first_name} ${data.insert_contact?.returning[0].last_name}`
       );
+      push('/');
     },
     onError: (error) => {
       toast.error(error.message);
     },
-    // delete contact cache to re-request updated pagination
-    update(cache) {
-      cache.evict({ fieldName: 'contact' });
-      cache.gc();
-    },
-    // // not needed to refetch after deleting cache
+    // NOT NEEDED BECAUSE OF REDIRECT DIFF PAGE
+    // // delete contact cache to re-request updated pagination
+    // update(cache) {
+    //   cache.evict({ fieldName: 'contact' });
+    //   cache.gc();
+    // },
+    // // manula refetch
     // refetchQueries: [
     //   {
     //     query: GET_REG_CONTACTS,
@@ -87,6 +91,7 @@ const AddForm: React.FC = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
+    localStorage.removeItem('PAGE'); // reset pagination state
     addContact({
       variables: {
         first_name: data.firstName,
@@ -98,13 +103,14 @@ const AddForm: React.FC = () => {
 
   return (
     <FormWrapper>
-      <h3
+      <div
         css={css`
-          margin-bottom: 0.5rem;
+          margin-bottom: 1rem;
         `}
       >
-        Add Contact
-      </h3>
+        <h3>Add New Contact</h3>
+        <p>Fill in new contact details here</p>
+      </div>
       <form onSubmit={onSubmit}>
         <div
           css={css`

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { fullCenter } from '../../styles/commonStyles';
+import { clickable, fullCenter } from '../../styles/commonStyles';
 
 type Props = {
   onClick?: () => void;
@@ -8,6 +8,7 @@ type Props = {
   role: 'primary' | 'secondary' | 'tertiary' | 'background';
   w?: number;
   h?: number;
+  r?: number;
   children: React.ReactNode;
 };
 
@@ -15,7 +16,9 @@ const ButtonStyle = styled.button<{
   role: string;
   w: number | undefined;
   h: number | undefined;
+  r: number | undefined;
 }>`
+  ${clickable}
   ${fullCenter}
   width: ${({ w }) => (w ? `${w}px` : 'auto')};
   height: ${({ h }) => (h ? `${h}px` : 'auto')};
@@ -27,7 +30,7 @@ const ButtonStyle = styled.button<{
       : role === 'tertiary'
       ? 'var(--clr-tertiary)'
       : 'var(--clr-background)'};
-  /* border-radius: 30px; */
+  border-radius: ${({ r }) => (r ? `${r}px` : '0')};
   color: #fff;
 
   &:hover {
@@ -35,9 +38,17 @@ const ButtonStyle = styled.button<{
   }
 `;
 
-const Button: React.FC<Props> = ({ onClick, type, role, children, w, h }) => {
+const Button: React.FC<Props> = ({
+  onClick,
+  type,
+  role,
+  children,
+  w,
+  h,
+  r,
+}) => {
   return (
-    <ButtonStyle type={type} onClick={onClick} role={role} w={w} h={h}>
+    <ButtonStyle type={type} onClick={onClick} role={role} w={w} h={h} r={r}>
       {children}
     </ButtonStyle>
   );

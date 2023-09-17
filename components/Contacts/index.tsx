@@ -15,17 +15,17 @@ import { fullCenter } from '../../styles/commonStyles';
 import { css } from '@emotion/react';
 import PaginationContainer from './PaginationContainer';
 
-const ContactsSectionStyle = styled.section`
+const ContactListStyle = styled.section`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
 `;
 
-const ContactsSection: React.FC = () => {
+const ContactList: React.FC = () => {
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
-  const { pagination, limit, page, setPagination } =
+  const { pagination, limit } =
     (useContext(PaginationContext) as PaginationContextType) ?? {};
 
   // graphql queries
@@ -51,11 +51,11 @@ const ContactsSection: React.FC = () => {
         like: pagination.like,
       },
     });
-  }, [pagination, fav]);
+  }, [getFavContacts, getRegContacts, pagination, fav]);
 
   return (
     <>
-      <ContactsSectionStyle>
+      <ContactListStyle>
         <div>
           {/* {(loadingReg || loadingFav) && <Loading />} */}
           {errorReg && <div css={fullCenter}>{errorReg?.message}</div>}
@@ -78,9 +78,9 @@ const ContactsSection: React.FC = () => {
         </div>
 
         {dataReg && <PaginationContainer dataReg={dataReg} />}
-      </ContactsSectionStyle>
+      </ContactListStyle>
     </>
   );
 };
 
-export default ContactsSection;
+export default ContactList;
