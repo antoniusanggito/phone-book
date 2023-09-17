@@ -12,10 +12,8 @@ import {
 } from '../context/paginationContext';
 import getFavIds from '../../utils/getFavIdQuery';
 import { fullCenter } from '../../styles/commonStyles';
-import PaginationButton from '../PaginationButton';
 import { css } from '@emotion/react';
-import Loading from '../Loading';
-import scrollTop from '../../utils/scrollTop';
+import PaginationContainer from './PaginationContainer';
 
 const ContactsSectionStyle = styled.section`
   flex-grow: 1;
@@ -23,14 +21,6 @@ const ContactsSectionStyle = styled.section`
   flex-direction: column;
   justify-content: space-between;
   border-bottom: 1px solid #ccc;
-`;
-
-const PaginationWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  margin: 2rem 0;
 `;
 
 const ContactsSection: React.FC = () => {
@@ -62,17 +52,6 @@ const ContactsSection: React.FC = () => {
       },
     });
   }, [pagination, fav]);
-
-  const handlePrev = () => {
-    setPagination((prev) => ({
-      ...prev,
-      offset: prev.offset - limit < 0 ? 0 : prev.offset - limit,
-    }));
-  };
-
-  const handleNext = () => {
-    setPagination((prev) => ({ ...prev, offset: prev.offset + limit }));
-  };
 
   return (
     <>
@@ -112,31 +91,7 @@ const ContactsSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Pagination button */}
-        {dataReg && (
-          <PaginationWrapper>
-            <PaginationButton
-              type="prev"
-              onClick={handlePrev}
-              disabled={page == 1}
-            />
-            <h4
-              css={css`
-                margin: 0 1rem;
-              `}
-            >
-              {page}
-            </h4>
-            <PaginationButton
-              type="next"
-              onClick={handleNext}
-              disabled={
-                page * limit >=
-                (dataReg.contact_aggregate.aggregate?.count as number)
-              }
-            />
-          </PaginationWrapper>
-        )}
+        {dataReg && <PaginationContainer dataReg={dataReg} />}
       </ContactsSectionStyle>
     </>
   );

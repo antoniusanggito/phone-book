@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import React from 'react';
-import { fullCenter } from '../styles/commonStyles';
+import { fullCenter } from '../../styles/commonStyles';
 
 type Props = {
   type: 'prev' | 'next';
@@ -25,7 +25,7 @@ const ButtonStyle = styled.button`
   }
 `;
 
-const AddButton: React.FC<Props> = ({ type, onClick, disabled }) => {
+const PaginationButton: React.FC<Props> = ({ type, onClick, disabled }) => {
   return (
     <ButtonStyle onClick={onClick} disabled={disabled}>
       {type === 'prev' && (
@@ -48,4 +48,4 @@ const AddButton: React.FC<Props> = ({ type, onClick, disabled }) => {
   );
 };
 
-export default AddButton;
+export default PaginationButton;
