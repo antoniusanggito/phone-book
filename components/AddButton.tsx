@@ -10,17 +10,6 @@ type Props = {
   onClick?: () => void;
 };
 
-const AddButtonWrapper = css`
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-
-  @media screen and (min-width: 768px) {
-    bottom: 5rem;
-    right: 10rem;
-  }
-`;
-
 const AddButton: React.FC<Props> = ({ onClick }) => {
   return (
     <div css={AddButtonWrapper}>
@@ -32,5 +21,16 @@ const AddButton: React.FC<Props> = ({ onClick }) => {
     </div>
   );
 };
+
+const AddButtonWrapper = css`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+
+  @media screen and (min-width: 768px) {
+    bottom: 5rem;
+    right: 10rem;
+  }
+`;
 
 export default AddButton;

@@ -14,24 +14,6 @@ interface CardProps {
   contact: IContact;
 }
 
-const CardStyle = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 10fr 2fr;
-  min-height: 60px;
-  border-bottom: 1px solid #ccc;
-  align-content: center;
-  padding: 8px 0;
-  text-align: left;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  &:hover {
-    background-color: var(--clr-background);
-  }
-`;
-
 const Card: React.FC<CardProps> = ({ isFav, contact }) => {
   const { id, first_name, last_name, phones } = contact;
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -114,12 +96,7 @@ const Card: React.FC<CardProps> = ({ isFav, contact }) => {
           />
         )}
       </div>
-      <div
-        css={css`
-          cursor: pointer;
-        `}
-        onClick={handleOpenModal}
-      >
+      <div css={clickable} onClick={handleOpenModal}>
         <h4>
           {first_name} {last_name}
         </h4>
@@ -163,5 +140,23 @@ const Card: React.FC<CardProps> = ({ isFav, contact }) => {
     </CardStyle>
   );
 };
+
+const CardStyle = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 10fr 2fr;
+  min-height: 60px;
+  border-bottom: 1px solid #ccc;
+  align-content: center;
+  padding: 8px 0;
+  text-align: left;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--clr-background);
+  }
+`;
 
 export default Card;

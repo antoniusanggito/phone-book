@@ -12,6 +12,22 @@ type Props = {
   children: React.ReactNode;
 };
 
+const Button: React.FC<Props> = ({
+  onClick,
+  type,
+  role,
+  children,
+  w,
+  h,
+  r,
+}) => {
+  return (
+    <ButtonStyle type={type} onClick={onClick} role={role} w={w} h={h} r={r}>
+      {children}
+    </ButtonStyle>
+  );
+};
+
 const ButtonStyle = styled.button<{
   role: string;
   w: number | undefined;
@@ -37,21 +53,5 @@ const ButtonStyle = styled.button<{
     cursor: pointer;
   }
 `;
-
-const Button: React.FC<Props> = ({
-  onClick,
-  type,
-  role,
-  children,
-  w,
-  h,
-  r,
-}) => {
-  return (
-    <ButtonStyle type={type} onClick={onClick} role={role} w={w} h={h} r={r}>
-      {children}
-    </ButtonStyle>
-  );
-};
 
 export default Button;

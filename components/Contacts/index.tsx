@@ -15,14 +15,6 @@ import { fullCenter } from '../../styles/commonStyles';
 import { css } from '@emotion/react';
 import PaginationContainer from './PaginationContainer';
 
-const ContactListStyle = styled.section`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* border-bottom: 1px solid #ccc; */
-`;
-
 const ContactList: React.FC = () => {
   const { fav } = (useContext(FavContext) as FavContextType) ?? {};
   const { pagination, limit } =
@@ -60,21 +52,37 @@ const ContactList: React.FC = () => {
           {/* {(loadingReg || loadingFav) && <Loading />} */}
           {errorReg && <div css={fullCenter}>{errorReg?.message}</div>}
           {errorFav && <div css={fullCenter}>{errorFav?.message}</div>}
-          <h3>Favorites ({dataFav?.contact.length})</h3>
-          {dataFav?.contact.map((contact: any) => (
-            <Card key={contact.id} isFav={fav[contact.id]} contact={contact} />
-          ))}
+          <h3>Favorite Contacts ({dataFav?.contact.length})</h3>
+          {dataFav?.contact.length === 0 ? (
+            <p css={infoText}>No contacts found</p>
+          ) : (
+            dataFav?.contact.map((contact: any) => (
+              <Card
+                key={contact.id}
+                isFav={fav[contact.id]}
+                contact={contact}
+              />
+            ))
+          )}
 
           <h3
             css={css`
-              margin-top: 1rem;
+              margin-top: 1.5rem;
             `}
           >
-            Others
+            Regular Contacts
           </h3>
-          {dataReg?.contact.map((contact: any) => (
-            <Card key={contact.id} isFav={fav[contact.id]} contact={contact} />
-          ))}
+          {dataReg?.contact.length === 0 ? (
+            <p css={infoText}>No contacts found</p>
+          ) : (
+            dataReg?.contact.map((contact: any) => (
+              <Card
+                key={contact.id}
+                isFav={fav[contact.id]}
+                contact={contact}
+              />
+            ))
+          )}
         </div>
 
         {dataReg && <PaginationContainer dataReg={dataReg} />}
@@ -82,5 +90,19 @@ const ContactList: React.FC = () => {
     </>
   );
 };
+
+const ContactListStyle = styled.section`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* border-bottom: 1px solid #ccc; */
+`;
+
+const infoText = css`
+  font-style: italic;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+`;
 
 export default ContactList;

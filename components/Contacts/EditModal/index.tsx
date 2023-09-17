@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Dialog } from '@headlessui/react';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { IContact } from '../../../types/types';
 import { useEditContactMutation } from '../../../generated/graphql';
 import { useForm } from 'react-hook-form';
@@ -16,64 +16,12 @@ interface EditModalProps {
   contact: IContact;
 }
 
-const modalStyle = css`
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  overflow-y: hidden;
-  background-color: rgba(0, 0, 0, 0.4);
-`;
-
-const modalContentStyle = css`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  width: 90%;
-  max-width: 500px;
-  padding: 2rem;
-  border-radius: 10px;
-  z-index: 50;
-
-  @media screen and (min-width: 768px) {
-    padding: 3rem 5rem;
-  }
-`;
-
-const FormStyle = styled.form`
-  padding-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  input[type='text'] {
-    width: 95%;
-    height: 2.5rem;
-    padding: 0 10px;
-  }
-
-  label {
-    font-size: 0.75rem;
-    font-weight: bold;
-  }
-`;
-
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
   setIsOpen,
   contact,
 }) => {
   const { id, first_name, last_name, phones } = contact;
-  const ref = useRef<HTMLHeadingElement | null>(null);
-
-  useEffect(() => {
-    ref.current?.focus();
-    // if (document.activeElement) {
-    //   const ref = document.activeElement as HTMLInputElement;
-    //   ref.blur();
-    // }
-  }, [ref]);
 
   const [editContact, { data, loading, error }] = useEditContactMutation({
     onCompleted: (data) => {
@@ -202,5 +150,48 @@ const EditModal: React.FC<EditModalProps> = ({
     </Dialog>
   );
 };
+
+const modalStyle = css`
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow-y: hidden;
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+const modalContentStyle = css`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 90%;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: 10px;
+  z-index: 50;
+
+  @media screen and (min-width: 768px) {
+    padding: 3rem 5rem;
+  }
+`;
+
+const FormStyle = styled.form`
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  input[type='text'] {
+    width: 95%;
+    height: 2.5rem;
+    padding: 0 10px;
+  }
+
+  label {
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+`;
 
 export default EditModal;

@@ -12,14 +12,6 @@ interface PaginationProps {
   dataReg: GetRegContactsQuery;
 }
 
-const PaginationContainerStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  margin: 2rem 0;
-`;
-
 const PaginationContainer: React.FC<PaginationProps> = ({ dataReg }) => {
   const { limit, page, setPagination } =
     (useContext(PaginationContext) as PaginationContextType) ?? {};
@@ -55,5 +47,13 @@ const PaginationContainer: React.FC<PaginationProps> = ({ dataReg }) => {
     </PaginationContainerStyle>
   );
 };
+
+const PaginationContainerStyle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 2rem 0;
+`;
 
 export default PaginationContainer;

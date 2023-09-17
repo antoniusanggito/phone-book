@@ -1,29 +1,13 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import React from 'react';
-import { fullCenter } from '../../styles/commonStyles';
+import { clickable, fullCenter } from '../../styles/commonStyles';
 
 type Props = {
   type: 'prev' | 'next';
   onClick: () => void;
   disabled: boolean;
 };
-
-const ButtonStyle = styled.button`
-  ${fullCenter}
-  width: auto;
-  height: 30px;
-  background-color: var(--clr-secondary);
-  color: #fff;
-
-  &:disabled {
-    background-color: #ccc;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
 
 const PaginationButton: React.FC<Props> = ({ type, onClick, disabled }) => {
   return (
@@ -59,5 +43,22 @@ const PaginationButton: React.FC<Props> = ({ type, onClick, disabled }) => {
     </>
   );
 };
+
+const ButtonStyle = styled.button`
+  ${fullCenter}
+  ${clickable}
+  width: auto;
+  height: 30px;
+  background-color: var(--clr-secondary);
+  color: #fff;
+
+  &:disabled {
+    background-color: #ccc;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 export default PaginationButton;

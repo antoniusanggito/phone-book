@@ -9,20 +9,6 @@ import Button from '../shared/Button';
 import { css } from '@emotion/react';
 import isWindow from '../../utils/scrollTop';
 
-const FormStyle = styled.form`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0.25rem;
-
-  input[type='text'] {
-    width: 100%;
-    height: 2.5rem;
-    padding: 0 10px;
-  }
-`;
-
 function initInput() {
   if (typeof window !== 'undefined') {
     const input = localStorage.getItem('PAGE');
@@ -99,5 +85,19 @@ const SearchInput: React.FC = () => {
     </div>
   );
 };
+
+const FormStyle = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.25rem;
+
+  input[type='text'] {
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 10px;
+  }
+`;
 
 export default SearchInput;
