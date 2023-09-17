@@ -5,7 +5,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useAddContactMutation } from '../../generated/graphql';
 import Button from '../shared/Button';
 import toast from 'react-hot-toast';
-import scrollTop from '../../utils/scrollTop';
 
 type FormValues = {
   firstName: string;
@@ -207,6 +206,7 @@ const AddForm: React.FC = () => {
               color: #fff;
             `}
             type="submit"
+            value="Submit"
           />
         </div>
       </form>
