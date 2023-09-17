@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import {
   PaginationContext,
   PaginationContextType,
@@ -23,11 +23,23 @@ const FormStyle = styled.form`
   }
 `;
 
+function initInput() {
+  if (typeof window !== 'undefined') {
+    const input = localStorage.getItem('PAGE');
+    return input ? JSON.parse(input).like.slice(1, -1) : '';
+  }
+  return '';
+}
+
 const SearchInput: React.FC = () => {
   const { setPagination } =
     (useContext(PaginationContext) as PaginationContextType) ?? {};
-  const [input, setInput] = useState<string>('');
+  const [input, setInput] = useState<string>(initInput());
   const [showSearch, setShowSearch] = useState<string>('');
+
+  useEffect(() => {
+    setShowSearch(input);
+  }, []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
