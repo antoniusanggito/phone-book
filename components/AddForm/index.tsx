@@ -151,7 +151,7 @@ const AddForm: React.FC = () => {
               {index > 0 && (
                 <Button
                   type="button"
-                  role="tertiary"
+                  info="tertiary"
                   onClick={() => remove(index)}
                 >
                   -
@@ -189,7 +189,7 @@ const AddForm: React.FC = () => {
               {index == 0 && (
                 <Button
                   type="button"
-                  role="secondary"
+                  info="secondary"
                   onClick={() => append({ number: '' })}
                 >
                   +
@@ -207,7 +207,7 @@ const AddForm: React.FC = () => {
           `}
         >
           <div></div>
-          <Button type="submit" role="secondary" w={80} h={40}>
+          <Button type="submit" info="secondary" w={80} h={40}>
             Submit
           </Button>
         </div>

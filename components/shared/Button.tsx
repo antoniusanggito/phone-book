@@ -5,7 +5,7 @@ import { clickable, fullCenter } from '../../styles/commonStyles';
 type Props = {
   onClick?: () => void;
   type: 'button' | 'submit' | 'reset' | undefined;
-  role: 'primary' | 'secondary' | 'tertiary' | 'background';
+  info: 'primary' | 'secondary' | 'tertiary' | 'background';
   w?: number;
   h?: number;
   r?: number;
@@ -15,21 +15,21 @@ type Props = {
 const Button: React.FC<Props> = ({
   onClick,
   type,
-  role,
+  info,
   children,
   w,
   h,
   r,
 }) => {
   return (
-    <ButtonStyle type={type} onClick={onClick} role={role} w={w} h={h} r={r}>
+    <ButtonStyle type={type} onClick={onClick} info={info} w={w} h={h} r={r}>
       {children}
     </ButtonStyle>
   );
 };
 
 const ButtonStyle = styled.button<{
-  role: string;
+  info: string;
   w: number | undefined;
   h: number | undefined;
   r: number | undefined;
@@ -38,12 +38,12 @@ const ButtonStyle = styled.button<{
   ${fullCenter}
   width: ${({ w }) => (w ? `${w}px` : 'auto')};
   height: ${({ h }) => (h ? `${h}px` : 'auto')};
-  background-color: ${({ role }) =>
-    role === 'primary'
+  background-color: ${({ info }) =>
+    info === 'primary'
       ? 'var(--clr-primary)'
-      : role === 'secondary'
+      : info === 'secondary'
       ? 'var(--clr-secondary)'
-      : role === 'tertiary'
+      : info === 'tertiary'
       ? 'var(--clr-tertiary)'
       : 'var(--clr-background)'};
   border-radius: ${({ r }) => (r ? `${r}px` : '0')};

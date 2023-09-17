@@ -64,7 +64,7 @@ const SearchInput: React.FC = () => {
           enterKeyHint="search"
           placeholder="Search contact"
         />
-        <Button type="submit" role="secondary" h={40}>
+        <Button type="submit" info="secondary" h={40}>
           <Image
             src="/icons/search.svg"
             alt="Search Icon"

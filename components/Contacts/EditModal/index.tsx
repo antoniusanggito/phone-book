@@ -146,14 +146,14 @@ const EditModal: React.FC<EditModalProps> = ({
             >
               <Button
                 type="button"
-                role="tertiary"
+                info="tertiary"
                 onClick={handleCancel}
                 w={80}
                 h={40}
               >
                 Cancel
               </Button>
-              <Button type="submit" role="secondary" w={80} h={40}>
+              <Button type="submit" info="secondary" w={80} h={40}>
                 Submit
               </Button>
             </div>

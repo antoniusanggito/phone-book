@@ -11,7 +11,7 @@ type Props = {
 const AddButton: React.FC<Props> = ({ onClick }) => {
   return (
     <div css={AddButtonWrapper}>
-      <Button type="button" role="secondary" w={60} h={60} r={30}>
+      <Button type="button" info="secondary" w={60} h={60} r={30}>
         <Link href="/form">
           <Image src="/icons/plus.svg" alt="Add Icon" width={24} height={24} />
         </Link>
