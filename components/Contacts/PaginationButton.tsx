@@ -27,24 +27,36 @@ const ButtonStyle = styled.button`
 
 const PaginationButton: React.FC<Props> = ({ type, onClick, disabled }) => {
   return (
-    <ButtonStyle onClick={onClick} disabled={disabled}>
+    <>
       {type === 'prev' && (
-        <Image
-          src="/icons/arrow-left.svg"
-          alt="Previous Page Icon"
-          width={16}
-          height={16}
-        />
+        <ButtonStyle
+          data-testid="prevBtn"
+          onClick={onClick}
+          disabled={disabled}
+        >
+          <Image
+            src="/icons/arrow-left.svg"
+            alt="Previous Page Icon"
+            width={16}
+            height={16}
+          />
+        </ButtonStyle>
       )}
       {type === 'next' && (
-        <Image
-          src="/icons/arrow-right.svg"
-          alt="Next Page Icon"
-          width={16}
-          height={16}
-        />
+        <ButtonStyle
+          data-testid="nextBtn"
+          onClick={onClick}
+          disabled={disabled}
+        >
+          <Image
+            src="/icons/arrow-right.svg"
+            alt="Next Page Icon"
+            width={16}
+            height={16}
+          />
+        </ButtonStyle>
       )}
-    </ButtonStyle>
+    </>
   );
 };
 

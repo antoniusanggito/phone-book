@@ -1,22 +1,34 @@
-import React, { createContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   PaginationContext,
   PaginationProviderProps,
   PaginationType,
 } from '../../components/context/paginationContext';
 
-const MockPaginationProvider: React.FC<PaginationProviderProps> = ({
+interface MockPaginationProviderProps {
+  children: React.ReactNode;
+  offset?: number;
+  like?: string;
+  limit?: number;
+  page?: number;
+}
+
+const MockPaginationProvider: React.FC<MockPaginationProviderProps> = ({
   children,
+  offset = 0,
+  like = '%%',
+  limit = 10,
+  page = 1,
 }) => {
   const [pagination, setPagination] = useState<PaginationType>({
-    offset: 0,
-    like: '',
+    offset,
+    like,
   });
 
   const mockValue = {
     pagination,
-    limit: 10,
-    page: 1,
+    limit,
+    page,
     setPagination,
   };
 
