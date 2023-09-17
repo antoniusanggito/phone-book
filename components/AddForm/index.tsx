@@ -150,7 +150,7 @@ const AddForm: React.FC = () => {
                 align-items: center;
                 gap: 0.25rem;
               `}
-              key={field.id}
+              key={index}
             >
               {index > 0 && (
                 <Button
@@ -163,7 +163,7 @@ const AddForm: React.FC = () => {
               )}
               <input
                 type="tel"
-                id="phones"
+                id={`phones.${index}`}
                 maxLength={20}
                 placeholder={
                   index > 0 ? `Phone Number ${index + 1}` : 'Phone Number'

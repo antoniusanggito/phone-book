@@ -74,6 +74,10 @@ const EditModal: React.FC<EditModalProps> = ({
     onError: (error) => {
       toast.error(error.message);
     },
+    update(cache) {
+      cache.evict({ fieldName: 'contact' });
+      cache.gc();
+    },
   });
 
   const {
